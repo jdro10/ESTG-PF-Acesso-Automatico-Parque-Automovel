@@ -71,6 +71,10 @@ Source: [Python binding](https://github.com/openalpr/openalpr/wiki/Integrating-O
 
 * [Raspberry Pi](https://www.raspberrypi.org/) - Mini computador a ser usado como base da aplicação.
 
+### Arquitetura
+
+![Arquitetura de software](https://github.com/jdro10/ESTG-Projeto-Final/blob/master/docs/img/software%20architecture.png)
+
 ### Desenvolvedor
 
 * Jorge Oliveira - 8160579
