@@ -36,6 +36,31 @@ wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg
 alpr lp.jpg
 ```
 
+Source: [OpenALPR](http://doc.openalpr.com/opensource.html#compiling-openalpr)
+
+Instalar/reinstalar o [Tesseract](https://github.com/tesseract-ocr/tesseract):
+
+```sh
+sudo add-apt-repository ppa:alex-p/tesseract-ocr -y
+sudo apt-get update -y
+
+#Reinstall tesseract
+sudo apt-get purge libtesseract-dev
+sudo apt-get install libtesseract-dev
+```
+
+Integrar o OpenALPR:
+
+```sh
+# Aceder a pasta do openalpr
+cd openalpr/src/bindings/ptyhon
+
+# Executar
+python setup.py install --user
+```
+
+Source: [Python binding](https://github.com/openalpr/openalpr/wiki/Integrating-OpenALPR)
+
 ### Tecnologia
 
 * [NodeJS](https://nodejs.org/en/) - Servidor.
