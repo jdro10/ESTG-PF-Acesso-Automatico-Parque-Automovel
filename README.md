@@ -53,7 +53,7 @@ Integrar o OpenALPR:
 
 ```sh
 # Aceder a pasta do openalpr
-cd openalpr/src/bindings/ptyhon
+cd openalpr/src/bindings/python
 
 # Executar
 python setup.py install --user
