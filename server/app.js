@@ -3,11 +3,23 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var Client = require('pg').Client
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+const client = new Client({
+  user: "postgres",
+  password: "postgres",
+  port: 5432,
+  database: "parking_lot_database"
+});
+
+client.connect()
+.then(() => console.log("Connected successfully to postgresql"))
+.catch(e => console.log(e))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
