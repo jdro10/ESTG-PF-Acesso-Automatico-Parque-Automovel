@@ -1,7 +1,8 @@
-import cv2
 import re
-import json
 import sys
+import cv2
+import json
+import pika
 import urllib.request
 import datetime
 import numpy as np
@@ -81,9 +82,24 @@ class PlateDetection:
         car_info_json = json.dumps(car_info)
 
         print(car_info_json)
+
+        self.send_json_to_server(car_info_json)
+
         self.last_plate = self.plate_list[0]
         self.plate_list = []
 
 
     def equal_elements(self, items):
         return all(plate == items[0] for plate in items)
+
+    
+    def send_json_to_server(self, json):  
+        connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host='localhost'))
+        channel = connection.channel()
+
+        channel.queue_declare(queue='plates_queue')
+
+        channel.basic_publish(exchange='', routing_key='plates_queue', body=json)
+        print("Plate sent to server...")
+        connection.close()
