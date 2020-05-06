@@ -3,7 +3,7 @@ var router = express.Router();
 var user = require('../controllers/usersController');
 
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  user.showUsersInfo(req, res);
 });
 
 router.post('/createUser', function(req, res, next){

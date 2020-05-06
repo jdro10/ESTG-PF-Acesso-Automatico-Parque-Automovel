@@ -132,7 +132,18 @@ userController.updateUserCar = function (req, res, next) {
 }
 
 userController.showUsersInfo = function (req, res, next) {
+    var query = `
+        SELECT *
+        FROM parkdriver pd, users u, cars c
+        WHERE pd.number = u.number AND pd.plate = c.plate`;
 
+    db.query(query, function(err, result){
+        if (err){
+            console.log(err);
+        } else{
+            res.json(result.rows[0]);
+        }
+    });
 }
 
 module.exports = userController;
