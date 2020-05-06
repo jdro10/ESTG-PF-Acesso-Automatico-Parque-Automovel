@@ -7,6 +7,7 @@ import urllib.request
 import datetime
 import numpy as np
 from openalpr import Alpr
+from threading import Thread
 
 
 class PlateDetection:
@@ -30,6 +31,11 @@ class PlateDetection:
 
         results = self.alpr.recognize_ndarray(frame)
 
+        if results['results'] != []:
+            Thread(target=self.get_plate_as_text, args=(results,)).start()
+
+
+    def get_plate_as_text(self, results):
         for plate in results['results']:
             for candidate in plate['candidates']:
                 if self.portuguese_plate_pattern.match(candidate['plate']):
@@ -48,7 +54,7 @@ class PlateDetection:
             if not found or not self.last_plate == self.plate_list[0]:       
                 self.recognized_plates.append(self.plate_list[0])
                 self.final_json()
-        
+
 
     def read_stream(self):
         jpeg_bytes = bytes()
@@ -66,7 +72,7 @@ class PlateDetection:
                 cv2.imshow('Webcam', frame)
 
                 self.read_plate(frame)
-                
+
                 if cv2.waitKey(1) == 27:
                     exit(0)
 
