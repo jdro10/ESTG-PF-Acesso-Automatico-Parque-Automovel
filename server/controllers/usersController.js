@@ -2,27 +2,75 @@ const db = require('../config/db');
 
 var userController = {};
 
-userController.create = function(req, res, next){
-    var user = {
+userController.create = function (req, res, next) {
+    var userInfo = {
         number: req.body.number,
-        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         plate: req.body.plate,
         car_brand: req.body.car_brand,
         car_model: req.body.car_model
     };
 
-    db.query(
-        "INSERT INTO users(number, name, plate, car_brand, car_model) VALUES ($1, $2, $3, $4, $5)",
-        [user.number, user.name, user.plate, user.car_brand, user.car_model],
-        function (err, res){
-            if(err){
-                next(err);
-            } else{
+    var queryUser = `
+        INSERT INTO users (
+            number,
+            firstName,
+            lastName
+        ) VALUES (
+            $1,
+            $2,
+            $3
+        )`;
+
+    var queryCar = `
+        INSERT INTO cars (
+            plate,
+            car_brand,
+            car_model
+        ) VALUES (
+            $1,
+            $2,
+            $3
+        )`;
+
+    var queryParkDriver = `
+        INSERT INTO parkDriver(
+            number,
+            plate
+        ) VALUES (
+            $1,
+            $2
+        )`;
+
+    db.query(queryUser, [userInfo.number, userInfo.firstName, userInfo.lastName],
+        function (err, res) {
+            if (err) {
+                console.log(err);
+            } else {
                 console.log(res);
             }
         });
 
-    res.json(user);
+    db.query(queryCar, [userInfo.plate, userInfo.car_brand, userInfo.car_model],
+        function (err, res) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res);
+            }
+        });
+
+    db.query(queryParkDriver, [userInfo.number, userInfo.plate],
+        function (err, res) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res);
+            }
+        });
+        
+    res.json(userInfo);
 };
 
 module.exports = userController;

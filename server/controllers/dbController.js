@@ -9,8 +9,7 @@ dbController.createUserTable = function (req, res) {
             firstName VARCHAR,
             lastName VARCHAR,
             PRIMARY KEY(number)
-        );
-        `;
+        );`;
 
     db.query(query, function (err, res) {
         if (err) {
@@ -28,8 +27,7 @@ dbController.createCarTable = function (req, res) {
             car_brand VARCHAR,
             car_model VARCHAR,
             PRIMARY KEY(plate)
-        );
-        `;
+        );`;
 
     db.query(query, function (err, res) {
         if (err) {
@@ -47,8 +45,7 @@ dbController.createParkAccessTable = function (req, res) {
             date DATE,
             PRIMARY KEY(date),
             FOREIGN KEY(plate) REFERENCES parkDriver(plate)
-        );
-        `;
+        );`;
 
     db.query(query, function (err, res) {
         if (err) {
@@ -67,8 +64,7 @@ dbController.createParkDriverTable = function (req, res) {
             PRIMARY KEY(number, plate),
             FOREIGN KEY(number) REFERENCES users(number),
             FOREIGN KEY(plate) REFERENCES cars(plate)
-        );
-        `;
+        );`;
 
     db.query(query, function (err, res) {
         if (err) {
