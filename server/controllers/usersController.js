@@ -69,8 +69,70 @@ userController.create = function (req, res, next) {
                 console.log(res);
             }
         });
-        
+
     res.json(userInfo);
 };
+
+userController.updateUserCar = function (req, res, next) {
+    var userNumber = req.body.number;
+
+    var carInfo = {
+        plate: req.body.plate,
+        car_brand: req.body.car_brand,
+        car_model: req.body.car_model
+    };
+
+    var queryUserPlate = `
+        SELECT plate
+        FROM parkdriver
+        WHERE number = $1`;
+
+    var queryCar = `
+        INSERT INTO cars (
+            plate,
+            car_brand,
+            car_model
+        ) VALUES (
+            $1,
+            $2,
+            $3
+        )`;
+
+    var queryUpdateUserPlate = `
+        UPDATE parkdriver
+        SET plate = $1 
+        WHERE plate = $2`;
+
+    db.query(queryCar, [carInfo.plate, carInfo.car_brand, carInfo.car_model],
+        function (err, res) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res);
+            }
+        });
+
+    db.query(queryUserPlate, [userNumber],
+        function (err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                db.query(queryUpdateUserPlate, [carInfo.plate, result.rows[0]['plate']],
+                    function (err, res) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log(res);
+                        }
+                    });
+            }
+        });
+
+    res.json('User plate updated');
+}
+
+userController.showUsersInfo = function (req, res, next) {
+
+}
 
 module.exports = userController;
