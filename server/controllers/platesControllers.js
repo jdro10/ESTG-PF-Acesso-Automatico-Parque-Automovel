@@ -1,24 +1,26 @@
 var amqp = require('amqplib/callback_api');
+var park = require('../controllers/parkController');
 
-amqp.connect('amqp://localhost', function (error0, connection) {
-    if (error0) {
-        throw error0;
+amqp.connect('amqp://localhost', function (err, connection) {
+    if (err) {
+        console.log(err);
+    } else {
+        connection.createChannel(function (err, channel) {
+            if (err) {
+                console.log(err);
+            } else {
+                var queue = 'plates_queue';
+
+                channel.assertQueue(queue, {
+                    durable: false
+                });
+
+                channel.consume(queue, function (msg) {
+                    park.parkEntrance(msg.content.toString());
+                }, {
+                    noAck: true
+                });
+            }
+        });
     }
-    connection.createChannel(function (error1, channel) {
-        if (error1) {
-            throw error1;
-        }
-        var queue = 'plates_queue';
-
-        channel.assertQueue(queue, {
-            durable: false
-        });
-
-        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
-        channel.consume(queue, function (msg) {
-            console.log(" [x] Received %s", msg.content.toString());
-        }, {
-            noAck: true
-        });
-    });
 });

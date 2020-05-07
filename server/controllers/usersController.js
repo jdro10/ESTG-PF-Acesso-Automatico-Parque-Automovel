@@ -48,7 +48,7 @@ userController.create = function (req, res, next) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(res);
+                console.log("Novo utilizador registado.");
             }
         });
 
@@ -57,7 +57,7 @@ userController.create = function (req, res, next) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(res);
+                console.log("Novo carro registado.");
             }
         });
 
@@ -66,7 +66,7 @@ userController.create = function (req, res, next) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(res);
+                console.log("Nova identificação de condutor criada.");
             }
         });
 
@@ -108,7 +108,7 @@ userController.updateUserCar = function (req, res, next) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(res);
+                console.log("Novo carro registado.");
             }
         });
 
@@ -122,13 +122,13 @@ userController.updateUserCar = function (req, res, next) {
                         if (err) {
                             console.log(err);
                         } else {
-                            console.log(res);
+                            console.log("Carro de utilizador atualizado.");
                         }
                     });
             }
         });
 
-    res.json('User plate updated');
+    res.json('User car updated');
 }
 
 userController.showUsersInfo = function (req, res, next) {
@@ -137,10 +137,10 @@ userController.showUsersInfo = function (req, res, next) {
         FROM parkdriver pd, users u, cars c
         WHERE pd.number = u.number AND pd.plate = c.plate`;
 
-    db.query(query, function(err, result){
-        if (err){
+    db.query(query, function (err, result) {
+        if (err) {
             console.log(err);
-        } else{
+        } else {
             res.json(result.rows[0]);
         }
     });
