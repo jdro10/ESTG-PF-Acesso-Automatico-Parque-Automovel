@@ -42,8 +42,9 @@ dbController.createParkAccessTable = function (req, res) {
     const query = `
         CREATE TABLE parkAccess (
             plate VARCHAR,
-            date DATE,
-            PRIMARY KEY(date),
+            date_in TIMESTAMP,
+            date_out DATE,
+            PRIMARY KEY(date_in),
             FOREIGN KEY(plate) REFERENCES parkDriver(plate)
         );`;
 
@@ -75,7 +76,7 @@ dbController.createParkDriverTable = function (req, res) {
     });
 };
 
-dbController.createUserTable();
-dbController.createCarTable();
-dbController.createParkDriverTable();
+//dbController.createUserTable();
+//dbController.createCarTable();
+//dbController.createParkDriverTable();
 dbController.createParkAccessTable();
