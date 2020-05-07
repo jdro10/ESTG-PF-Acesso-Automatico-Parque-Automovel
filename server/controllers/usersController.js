@@ -146,4 +146,21 @@ userController.showUsersInfo = function (req, res, next) {
     });
 }
 
+userController.showUserEntries = function(req, res, next) {
+    var userNumber = req.params.number;
+
+    var query = `
+        SELECT *
+        FROM users u, parkdriver pd, parkaccess pa, cars c
+        WHERE u.number = $1 AND pd.number = u.number AND pa.plate = pd.plate AND c.plate = pd.plate`;
+
+    db.query(query, [userNumber], function(err, result){
+        if(err){
+            console.log(err);
+        } else{
+            res.json(result.rows);
+        }
+    });
+}
+
 module.exports = userController;

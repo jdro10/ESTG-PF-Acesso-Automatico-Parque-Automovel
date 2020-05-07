@@ -14,4 +14,8 @@ router.put('/updateUser', function(req, res, next){
   user.updateUserCar(req, res);
 });
 
+router.get('/:number', function(req, res, next) {
+  user.showUserEntries(req, res);
+});
+
 module.exports = router;
