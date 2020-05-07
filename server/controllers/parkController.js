@@ -10,11 +10,10 @@ parkController.parkEntrance = function (plateInfo) {
         FROM parkDriver
         WHERE plate = $1`;
 
-    var checkIn = `
+    var saveEntry = `
         INSERT INTO parkaccess (
             plate,
-            date_in,
-            date_out
+            date_in
         ) VALUES (
             $1,
             $2
@@ -25,16 +24,16 @@ parkController.parkEntrance = function (plateInfo) {
             console.log(err);
         } else {
             if (result.rowCount > 0) {
-                console.log("Entrada no parque confirmada");
-                db.query(checkIn, [plateJson['detected_plates'], plateJson['time']], function(err, result){
+                console.log("Entrada no parque confirmada", plateJson['detected_plates']);
+                db.query(saveEntry, [plateJson['detected_plates'], plateJson['time']], function(err, result){
                     if(err){
                         console.log(err);
                     } else{
                         console.log("Entrada no parque registada.");
                     }
                 })
-            } else if (result.rowCount == 0) {
-                console.log("Não pode entrar no parque...");
+            } else {
+                console.log("Não pode entrar no parque...", plateJson['detected_plates']);
             }
         }
     });

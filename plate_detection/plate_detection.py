@@ -39,7 +39,7 @@ class PlateDetection:
     def get_plate_as_text(self, results):
         for plate in results['results']:
             for candidate in plate['candidates']:
-                if self.old_portuguese_plate_pattern.match(candidate['plate']) and self.new_portuguese_plate_pattern(candidate['plate']):
+                if self.old_portuguese_plate_pattern.match(candidate['plate']) or self.new_portuguese_plate_pattern.match(candidate['plate']):
                     self.plate_list.append(candidate['plate'])
 
         if not self.equal_elements(self.plate_list):
