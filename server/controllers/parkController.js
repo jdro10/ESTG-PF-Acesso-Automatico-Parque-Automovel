@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-var parkController = {}
+var parkController = {};
 
 parkController.parkEntrance = function (plateInfo) {
     var plateJson = JSON.parse(plateInfo);
@@ -17,8 +17,7 @@ parkController.parkEntrance = function (plateInfo) {
             date_out
         ) VALUES (
             $1,
-            $2,
-            NULL
+            $2
         )`;
 
     db.query(checkAccess, [plateJson['detected_plates']], function (err, result) {

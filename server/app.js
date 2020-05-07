@@ -41,4 +41,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+console.log("Server running on port 3000");
+
 module.exports = app;

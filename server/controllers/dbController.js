@@ -43,7 +43,6 @@ dbController.createParkAccessTable = function (req, res) {
         CREATE TABLE parkAccess (
             plate VARCHAR,
             date_in TIMESTAMP,
-            date_out DATE,
             PRIMARY KEY(date_in),
             FOREIGN KEY(plate) REFERENCES parkDriver(plate)
         );`;
