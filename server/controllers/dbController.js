@@ -76,7 +76,7 @@ dbController.createParkDriverTable = function (req, res) {
     });
 };
 
-//dbController.createUserTable();
-//dbController.createCarTable();
-//dbController.createParkDriverTable();
+dbController.createUserTable();
+dbController.createCarTable();
+dbController.createParkDriverTable();
 dbController.createParkAccessTable();

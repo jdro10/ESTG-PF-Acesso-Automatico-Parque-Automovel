@@ -5,7 +5,7 @@ var parkController = {}
 parkController.parkEntrance = function (plateInfo) {
     var plateJson = JSON.parse(plateInfo);
 
-    var checkPlateExists = `
+    var checkAccess = `
         SELECT plate
         FROM parkDriver
         WHERE plate = $1`;
@@ -21,7 +21,7 @@ parkController.parkEntrance = function (plateInfo) {
             NULL
         )`;
 
-    db.query(checkPlateExists, [plateJson['detected_plates']], function (err, result) {
+    db.query(checkAccess, [plateJson['detected_plates']], function (err, result) {
         if (err) {
             console.log(err);
         } else {

@@ -15,7 +15,8 @@ class PlateDetection:
     def __init__(self):
         self.stream_url = urllib.request.urlopen('http://192.168.1.120:8000')
         self.alpr = Alpr('eu', '/etc/openalpr/openalpr.conf', '/usr/share/openalpr/runtime_data')
-        self.portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[0-9]{2}$|[0-9]{2}[A-Z]{2}[0-9]{2}$|[0-9]{2}[0-9]{2}[A-Z]{2}$')
+        self.old_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[0-9]{2}$|[0-9]{2}[A-Z]{2}[0-9]{2}$|[0-9]{2}[0-9]{2}[A-Z]{2}$')
+        self.new_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[A-Z]{2}$')
         self.plate_list = []
         self.recognized_plates = []
         self.last_plate = None
@@ -38,7 +39,7 @@ class PlateDetection:
     def get_plate_as_text(self, results):
         for plate in results['results']:
             for candidate in plate['candidates']:
-                if self.portuguese_plate_pattern.match(candidate['plate']):
+                if self.old_portuguese_plate_pattern.match(candidate['plate']) and self.new_portuguese_plate_pattern(candidate['plate']):
                     self.plate_list.append(candidate['plate'])
 
         if not self.equal_elements(self.plate_list):
