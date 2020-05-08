@@ -1,9 +1,7 @@
 import re
 import sys
-import cv2
 import json
 import pika
-import urllib.request
 import datetime
 import numpy as np
 from openalpr import Alpr
@@ -13,14 +11,13 @@ from threading import Thread
 class PlateDetection:
 
     def __init__(self):
-        self.stream_url = urllib.request.urlopen('http://192.168.1.120:8000')
         self.alpr = Alpr('eu', '/etc/openalpr/openalpr.conf', '/usr/share/openalpr/runtime_data')
         self.old_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[0-9]{2}$|[0-9]{2}[A-Z]{2}[0-9]{2}$|[0-9]{2}[0-9]{2}[A-Z]{2}$')
         self.new_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[A-Z]{2}$')
         self.plate_list = []
         self.recognized_plates = []
         self.last_plate = None
-        self.capture = True
+        self.queue_name = None
 
 
     def read_plate(self, frame):
@@ -57,27 +54,6 @@ class PlateDetection:
                 self.final_json()
 
 
-    def read_stream(self):
-        jpeg_bytes = bytes()
-
-        while self.capture:
-            jpeg_bytes += self.stream_url.read(1024)
-            start_b = jpeg_bytes.find(b'\xff\xd8')
-            end_b = jpeg_bytes.find(b'\xff\xd9')
-
-            if start_b != -1 and end_b != -1:
-                jpeg = jpeg_bytes[start_b:end_b+2]
-                jpeg_bytes = jpeg_bytes[end_b+2:]
-                frame = cv2.imdecode(np.fromstring(jpeg, dtype=np.uint8), cv2.IMREAD_COLOR)
-                
-                cv2.imshow('Webcam', frame)
-
-                self.read_plate(frame)
-
-                if cv2.waitKey(1) == 27:
-                    exit(0)
-
-
     def final_json(self):
         current_time = str(datetime.datetime.now())
 
@@ -90,7 +66,7 @@ class PlateDetection:
 
         print(car_info_json)
 
-        self.send_json_to_server(car_info_json)
+        self.send_json_to_server(car_info_json, self.queue_name)
 
         self.last_plate = self.plate_list[0]
         self.plate_list = []
@@ -100,13 +76,16 @@ class PlateDetection:
         return all(plate == items[0] for plate in items)
 
     
-    def send_json_to_server(self, json):  
+    def send_json_to_server(self, json, queue_name):  
         connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='localhost'))
         channel = connection.channel()
 
-        channel.queue_declare(queue='plates_queue')
+        channel.queue_declare(queue=self.queue_name)
 
         channel.basic_publish(exchange='', routing_key='plates_queue', body=json)
-        print("Plate sent to server...")
+        print("Plate sent to server... Queue:", queue_name)
         connection.close()
+
+    def set_queue_name(self, queue_name):
+        self.queue_name = queue_name
