@@ -87,7 +87,7 @@ class PlateDetection:
 
         channel.queue_declare(queue=self.queue_name)
 
-        channel.basic_publish(exchange='', routing_key='plates_queue', body=json)
+        channel.basic_publish(exchange='', routing_key=self.queue_name, body=json)
         print("Plate sent to server... Queue:", queue_name)
         connection.close()
 

@@ -31,10 +31,10 @@ parkController.parkEntrance = function (plateInfo) {
         } else {
             if (result.rowCount > 0) {
                 console.log("Entrada no parque confirmada", plateJson['detected_plates']);
-                db.query(saveEntry, [plateJson['detected_plates'], plateJson['day'], plateJson['hour']], function(err, result){
-                    if(err){
+                db.query(saveEntry, [plateJson['detected_plates'], plateJson['day'], plateJson['hour']], function (err, result) {
+                    if (err) {
                         console.log(err);
-                    } else{
+                    } else {
                         console.log("Entrada no parque registada.");
                     }
                 })
@@ -43,6 +43,49 @@ parkController.parkEntrance = function (plateInfo) {
             }
         }
     });
+}
+
+parkController.parkExit = function (plateInfo) {
+    var plateJson = JSON.parse(plateInfo);
+
+    var savePlateExit = `
+        UPDATE parkaccess
+        SET date_out = $1, time_out = $2
+        WHERE plate = $3 AND date_out IS NULL AND time_out IS NULL`;
+    
+    db.query(savePlateExit, [plateJson['day'], plateJson['hour'], plateJson['detected_plates']], function(err, res){
+        if (err) {
+            console.log(err);
+        } else {
+            if(res.rowCount > 0){
+                console.log("Saída registada com sucesso.", plateJson['detected_plates']);
+            } else{
+                console.log("Saída não registada, pois o veículo nao se encontrava dentro do parque.");
+            }
+        }
+    });
+
+    /*
+    db.query(searchPlateEntry, [plateJson['detected_plates']], function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (result.rowCount > 0) {
+                console.log("Saída do parque confirmada", plateJson['detected_plates']);
+
+                db.query(savePlateExit, [plateJson['day'], plateJson['hour']], function (err, result) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("Saída do parque registada.");
+                    }
+                })
+            } else {
+                console.log("Não pode sair do parque...", plateJson['detected_plates']);
+            }
+        }
+    });
+    */
 }
 
 module.exports = parkController;

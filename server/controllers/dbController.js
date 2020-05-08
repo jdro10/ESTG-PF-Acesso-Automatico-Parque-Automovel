@@ -45,7 +45,7 @@ dbController.createParkAccessTable = function (req, res) {
             date_in DATE,
             time_in TIME,
             date_out DATE,
-            time_out DATE,
+            time_out TIME,
             PRIMARY KEY(time_in),
             FOREIGN KEY(plate) REFERENCES parkDriver(plate)
         );`;

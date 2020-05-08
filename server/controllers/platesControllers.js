@@ -1,6 +1,8 @@
 var amqp = require('amqplib/callback_api');
 var park = require('../controllers/parkController');
 
+var platesController = {};
+
 amqp.connect('amqp://localhost', function (err, connection) {
     if (err) {
         console.log(err);
@@ -9,14 +11,32 @@ amqp.connect('amqp://localhost', function (err, connection) {
             if (err) {
                 console.log(err);
             } else {
-                var queue = 'plates_queue';
+                var entryQueue = 'entry_queue';
 
-                channel.assertQueue(queue, {
+                channel.assertQueue(entryQueue, {
                     durable: false
                 });
 
-                channel.consume(queue, function (msg) {
+                channel.consume(entryQueue, function (msg) {
                     park.parkEntrance(msg.content.toString());
+                }, {
+                    noAck: true
+                });
+            }
+        });
+
+        connection.createChannel(function (err, channel) {
+            if (err) {
+                console.log(err);
+            } else {
+                var exitQueue = 'exit_queue';
+
+                channel.assertQueue(exitQueue, {
+                    durable: false
+                });
+
+                channel.consume(exitQueue, function (msg) {
+                    park.parkExit(msg.content.toString());
                 }, {
                     noAck: true
                 });
