@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler,HTTPServer
 import cv2
 
-PORT_NUMBER = 8000
+PORT_NUMBER = 8001
 
 #capture image from webcam 0
 cap = cv2.VideoCapture(0)
@@ -24,9 +24,9 @@ class CamHandler(BaseHTTPRequestHandler):
             
 
 try:
-    server = HTTPServer(('localhost', PORT_NUMBER), CamHandler)
-    print('Started httpserver on port', PORT_NUMBER)
-    server.serve_forever()
+    serverExit = HTTPServer(('localhost', PORT_NUMBER), CamHandler)
+    print('Exit capture started httpserver on port', PORT_NUMBER)
+    serverExit.serve_forever()
 except KeyboardInterrupt:
     cap.release()
-    server.server_close()
+    serverExit.server_close()
