@@ -13,10 +13,16 @@ parkController.parkEntrance = function (plateInfo) {
     var saveEntry = `
         INSERT INTO parkaccess (
             plate,
-            date_in
+            date_in,
+            time_in,
+            date_out,
+            time_out
         ) VALUES (
             $1,
-            $2
+            $2,
+            $3,
+            NULL,
+            NULL
         )`;
 
     db.query(checkAccess, [plateJson['detected_plates']], function (err, result) {
@@ -25,7 +31,7 @@ parkController.parkEntrance = function (plateInfo) {
         } else {
             if (result.rowCount > 0) {
                 console.log("Entrada no parque confirmada", plateJson['detected_plates']);
-                db.query(saveEntry, [plateJson['detected_plates'], plateJson['time']], function(err, result){
+                db.query(saveEntry, [plateJson['detected_plates'], plateJson['day'], plateJson['hour']], function(err, result){
                     if(err){
                         console.log(err);
                     } else{
