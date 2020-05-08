@@ -60,32 +60,10 @@ parkController.parkExit = function (plateInfo) {
             if(res.rowCount > 0){
                 console.log("Saída registada com sucesso.", plateJson['detected_plates']);
             } else{
-                console.log("Saída não registada, pois o veículo nao se encontrava dentro do parque.");
+                console.log("Saída não registada, matrícula não se encontra no parque.");
             }
         }
     });
-
-    /*
-    db.query(searchPlateEntry, [plateJson['detected_plates']], function (err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            if (result.rowCount > 0) {
-                console.log("Saída do parque confirmada", plateJson['detected_plates']);
-
-                db.query(savePlateExit, [plateJson['day'], plateJson['hour']], function (err, result) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("Saída do parque registada.");
-                    }
-                })
-            } else {
-                console.log("Não pode sair do parque...", plateJson['detected_plates']);
-            }
-        }
-    });
-    */
 }
 
 module.exports = parkController;
