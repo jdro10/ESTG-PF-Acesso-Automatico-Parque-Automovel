@@ -1,4 +1,5 @@
 import cv2
+import datetime
 import urllib.request
 import numpy as np
 from plate_detection import PlateDetection
@@ -15,6 +16,13 @@ class EntryPlateDetection(PlateDetection):
         jpeg_bytes = bytes()
 
         while True:
+            delta = datetime.datetime.now() - self.current_time
+
+            if delta.seconds >= 15:
+                self.plate_list = []
+                self.last_plate = None
+                self.current_time = datetime.datetime.now()
+
             jpeg_bytes += self.entry_stream_url.read(1024)
             start_b = jpeg_bytes.find(b'\xff\xd8')
             end_b = jpeg_bytes.find(b'\xff\xd9')

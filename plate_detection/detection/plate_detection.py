@@ -18,6 +18,7 @@ class PlateDetection:
         self.recognized_plates = []
         self.last_plate = None
         self.queue_name = None
+        self.current_time = datetime.datetime.now()
 
 
     def read_plate(self, frame):
