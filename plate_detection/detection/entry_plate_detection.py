@@ -1,5 +1,4 @@
 import cv2
-import datetime
 import urllib.request
 import numpy as np
 from plate_detection import PlateDetection
@@ -38,3 +37,11 @@ class EntryPlateDetection(PlateDetection):
 
                 if cv2.waitKey(1) == 27:
                     exit(0)
+
+
+def main():
+    entry = EntryPlateDetection()
+    entry.read_stream()
+
+if __name__ == "__main__":
+    main()
