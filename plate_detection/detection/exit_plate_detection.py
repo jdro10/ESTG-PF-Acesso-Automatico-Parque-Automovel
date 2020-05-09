@@ -37,3 +37,11 @@ class ExitPlateDetection(PlateDetection):
 
                 if cv2.waitKey(1) == 27:
                     exit(0)
+
+
+def main():
+    exit = ExitPlateDetection()
+    exit.read_stream()
+
+if __name__ == "__main__":
+    main()
