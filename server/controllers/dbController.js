@@ -78,7 +78,28 @@ dbController.createParkDriverTable = function (req, res) {
     });
 };
 
+dbController.createOpenParkAccessTable = function(req, res) {
+    const query = `
+        CREATE TABLE openParkAccess (
+            plate VARCHAR,
+            date_in DATE,
+            time_in TIME,
+            date_out DATE,
+            time_out TIME,
+            PRIMARY KEY(time_in)
+        );`;
+
+        db.query(query, function (err, res) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Parking lot open access table created successfully");
+            }
+        });
+};
+
 dbController.createUserTable();
 dbController.createCarTable();
 dbController.createParkDriverTable();
 dbController.createParkAccessTable();
+dbController.createOpenParkAccessTable();
