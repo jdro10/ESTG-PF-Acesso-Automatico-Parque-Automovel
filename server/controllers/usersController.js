@@ -105,9 +105,13 @@ userController.updateUserCar = function (req, res, next) {
         )`;
 
     var queryUpdateUserPlate = `
-        UPDATE parkdriver
-        SET plate = $1 
-        WHERE plate = $2`;
+        INSERT INTO parkdriver(
+            number,
+            plate
+        ) VALUES (
+            $1,
+            $2
+        )`;
 
     db.query(queryCar, [carInfo.plate, carInfo.car_brand, carInfo.car_model], function (err, resCar) {
         if (err) {
@@ -123,7 +127,7 @@ userController.updateUserCar = function (req, res, next) {
                         error: "Número já existente."
                     });
                 } else {
-                    db.query(queryUpdateUserPlate, [carInfo.plate, resUser.rows[0]['plate']], function (err, resUpdateUser) {
+                    db.query(queryUpdateUserPlate, [userNumber, carInfo.plate], function (err, resUpdateUser) {
                         if (err) {
                             rollback(db);
                             console.log(err);

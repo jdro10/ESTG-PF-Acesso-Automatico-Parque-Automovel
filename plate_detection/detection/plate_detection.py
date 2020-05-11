@@ -57,13 +57,10 @@ class PlateDetection:
 
     def final_json(self):
         current_time_info = str(datetime.datetime.now())
-        time_split = current_time_info.split(' ')
-        current_day = time_split[0]
-        current_hour = time_split[1]
+        date_time = current_time_info.split('.')[0]
 
         car_info = {
-            "day": current_day,
-            "hour": current_hour,
+            "date": date_time,
             "detected_plates": self.plate_list[0]
         }
 

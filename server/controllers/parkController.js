@@ -15,14 +15,10 @@ parkController.parkEntrance = function (plateInfo) {
         INSERT INTO parkaccess (
             plate,
             date_in,
-            time_in,
-            date_out,
-            time_out
+            date_out
         ) VALUES (
             $1,
             $2,
-            $3,
-            NULL,
             NULL
         )`;
 
@@ -49,7 +45,7 @@ parkController.parkEntrance = function (plateInfo) {
                 if (result.rowCount > 0) {
                     console.log("Entrada no parque confirmada", plateJson['detected_plates']);
 
-                    db.query(saveEntry, [plateJson['detected_plates'], plateJson['day'], plateJson['hour']], function (err, result) {
+                    db.query(saveEntry, [plateJson['detected_plates'], plateJson['date']], function (err, result) {
                         if (err) {
                             console.log(err);
                         } else {
@@ -64,11 +60,11 @@ parkController.parkEntrance = function (plateInfo) {
     } else {
         console.log("Entrada no parque confirmada", plateJson['detected_plates']);
 
-        db.query(saveEntryOpenTable, [plateJson['detected_plates'], plateJson['day'], plateJson['hour']], function (err, result) {
+        db.query(saveEntry, [plateJson['detected_plates'], plateJson['date']], function (err, result) {
             if (err) {
                 console.log(err);
             } else {
-                console.log("Entrada registada na tabela open park access", plateJson['detected_plates']);
+                console.log("Entrada no parque registada.");
             }
         });
     }
@@ -82,7 +78,7 @@ parkController.parkExit = function (plateInfo) {
         SET date_out = $1, time_out = $2
         WHERE plate = $3 AND date_out IS NULL AND time_out IS NULL`;
 
-    db.query(savePlateExit, [plateJson['day'], plateJson['hour'], plateJson['detected_plates']], function (err, res) {
+    db.query(savePlateExit, [plateJson['date'], plateJson['detected_plates']], function (err, res) {
         if (err) {
             console.log(err);
         } else {

@@ -42,12 +42,10 @@ dbController.createParkAccessTable = function (req, res) {
     const query = `
         CREATE TABLE parkAccess (
             plate VARCHAR,
-            date_in DATE,
-            time_in TIME,
-            date_out DATE,
-            time_out TIME,
-            PRIMARY KEY(time_in),
-            FOREIGN KEY(plate) REFERENCES parkDriver(plate)
+            date_in TIMESTAMP,
+            date_out TIMESTAMP,
+            PRIMARY KEY(plate, date_in),
+            FOREIGN KEY(plate) REFERENCES parkDriver(plate) ON UPDATE NO ACTION
         );`;
 
     db.query(query, function (err, res) {
@@ -78,6 +76,7 @@ dbController.createParkDriverTable = function (req, res) {
     });
 };
 
+/*
 dbController.createOpenParkAccessTable = function(req, res) {
     const query = `
         CREATE TABLE openParkAccess (
@@ -97,9 +96,10 @@ dbController.createOpenParkAccessTable = function(req, res) {
             }
         });
 };
+*/
 
 dbController.createUserTable();
 dbController.createCarTable();
 dbController.createParkDriverTable();
 dbController.createParkAccessTable();
-dbController.createOpenParkAccessTable();
+//dbController.createOpenParkAccessTable();
