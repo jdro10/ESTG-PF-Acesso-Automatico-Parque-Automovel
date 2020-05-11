@@ -2,6 +2,10 @@ const db = require('../config/db');
 
 var userController = {};
 
+var rollback = function (db) {
+    db.query('ROLLBACK');
+  };
+
 userController.create = function (req, res, next) {
     var userInfo = {
         number: req.body.number,
@@ -43,34 +47,36 @@ userController.create = function (req, res, next) {
             $2
         )`;
 
-    db.query(queryUser, [userInfo.number, userInfo.firstName, userInfo.lastName],
-        function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Novo utilizador registado.");
-            }
-        });
-
-    db.query(queryCar, [userInfo.plate, userInfo.car_brand, userInfo.car_model],
-        function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Novo carro registado.");
-            }
-        });
-
-    db.query(queryParkDriver, [userInfo.number, userInfo.plate],
-        function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Nova identificação de condutor criada.");
-            }
-        });
-
-    res.json(userInfo);
+    db.query(queryUser, [userInfo.number, userInfo.firstName, userInfo.lastName], function (err, resUser) {
+        if (err) {
+            rollback(db);
+            res.json({
+                error: "Número de utilizador já existente."
+            });
+        } else {
+            db.query(queryCar, [userInfo.plate, userInfo.car_brand, userInfo.car_model], function (err, resCar) {
+                if (err) {
+                    rollback(db);
+                    res.json({
+                        error: "Matrícula já existente."
+                    });
+                } else {
+                    db.query(queryParkDriver, [userInfo.number, userInfo.plate], function (err, resDriver) {
+                        if (err) {
+                            rollback(db);
+                            res.json({
+                                error: "Ocorreu um erro."
+                            });
+                        } else {
+                            res.json({
+                                user: userInfo
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
 };
 
 userController.updateUserCar = function (req, res, next) {
@@ -99,37 +105,50 @@ userController.updateUserCar = function (req, res, next) {
         )`;
 
     var queryUpdateUserPlate = `
-        UPDATE parkdriver
-        SET plate = $1 
-        WHERE plate = $2`;
+        INSERT INTO parkdriver(
+            number,
+            plate
+        ) VALUES (
+            $1,
+            $2
+        )`;
 
-    db.query(queryCar, [carInfo.plate, carInfo.car_brand, carInfo.car_model],
-        function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Novo carro registado.");
-            }
-        });
-
-    db.query(queryUserPlate, [userNumber],
-        function (err, result) {
-            if (err) {
-                console.log(err);
-            } else {
-                db.query(queryUpdateUserPlate, [carInfo.plate, result.rows[0]['plate']],
-                    function (err, res) {
+    db.query(queryCar, [carInfo.plate, carInfo.car_brand, carInfo.car_model], function (err, resCar) {
+        if (err) {
+            rollback(db);
+            res.json({
+                error: "Matrícula já existente."
+            });
+        } else {
+            db.query(queryUserPlate, [userNumber], function (err, resUser) {
+                if (err) {
+                    rollback(db);
+                    res.json({
+                        error: "Número já existente."
+                    });
+                } else {
+                    db.query(queryUpdateUserPlate, [userNumber, carInfo.plate], function (err, resUpdateUser) {
                         if (err) {
+                            rollback(db);
                             console.log(err);
+                            res.json({
+                                error: "Ocorreu um erro."
+                            });
                         } else {
-                            console.log("Carro de utilizador atualizado.");
+                            res.json({
+                                msg: "Dados de utilizador atualizados",
+                                number: userNumber,
+                                plate: carInfo.plate,
+                                car_brand: carInfo.car_brand,
+                                car_model: carInfo.car_model
+                            });
                         }
                     });
-            }
-        });
-
-    res.json('User car updated');
-}
+                }
+            });
+        }
+    });
+};
 
 userController.showUsersInfo = function (req, res, next) {
     var query = `
@@ -139,14 +158,16 @@ userController.showUsersInfo = function (req, res, next) {
 
     db.query(query, function (err, result) {
         if (err) {
-            console.log(err);
+            res.json({
+                error: "Ocorreu um erro"
+            });
         } else {
-            res.json(result.rows[0]);
+            res.json({ users: result.rows} );
         }
     });
-}
+};
 
-userController.showUserEntries = function(req, res, next) {
+userController.showUserEntries = function (req, res, next) {
     var userNumber = req.params.number;
 
     var query = `
@@ -154,13 +175,13 @@ userController.showUserEntries = function(req, res, next) {
         FROM users u, parkdriver pd, parkaccess pa, cars c
         WHERE u.number = $1 AND pd.number = u.number AND pa.plate = pd.plate AND c.plate = pd.plate`;
 
-    db.query(query, [userNumber], function(err, result){
-        if(err){
+    db.query(query, [userNumber], function (err, result) {
+        if (err) {
             console.log(err);
-        } else{
+        } else {
             res.json(result.rows);
         }
     });
-}
+};
 
 module.exports = userController;
