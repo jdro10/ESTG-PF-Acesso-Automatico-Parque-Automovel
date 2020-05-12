@@ -26,6 +26,7 @@ dbController.createCarTable = function (req, res) {
             plate VARCHAR,
             car_brand VARCHAR,
             car_model VARCHAR,
+            access_park BOOLEAN,
             PRIMARY KEY(plate)
         );`;
 
@@ -45,7 +46,7 @@ dbController.createParkAccessTable = function (req, res) {
             date_in TIMESTAMP,
             date_out TIMESTAMP,
             PRIMARY KEY(plate, date_in),
-            FOREIGN KEY(plate) REFERENCES parkDriver(plate) ON UPDATE NO ACTION
+            FOREIGN KEY(plate) REFERENCES parkDriver(plate)
         );`;
 
     db.query(query, function (err, res) {
@@ -76,30 +77,4 @@ dbController.createParkDriverTable = function (req, res) {
     });
 };
 
-/*
-dbController.createOpenParkAccessTable = function(req, res) {
-    const query = `
-        CREATE TABLE openParkAccess (
-            plate VARCHAR,
-            date_in DATE,
-            time_in TIME,
-            date_out DATE,
-            time_out TIME,
-            PRIMARY KEY(time_in)
-        );`;
-
-        db.query(query, function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Parking lot open access table created successfully");
-            }
-        });
-};
-*/
-
-dbController.createUserTable();
-dbController.createCarTable();
-dbController.createParkDriverTable();
-dbController.createParkAccessTable();
-//dbController.createOpenParkAccessTable();
+module.exports = dbController;

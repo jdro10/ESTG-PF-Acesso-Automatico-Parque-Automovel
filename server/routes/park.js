@@ -4,7 +4,7 @@ var park = require('../controllers/parkController');
 
 router.get('/getParkMode', function(req, res, next){
     park.getParkMode(req, res);
-})
+});
 
 router.put('/changeParkMode', function(req, res, next) {
     park.changeParkMode(req, res);

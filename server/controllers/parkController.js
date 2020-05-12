@@ -7,9 +7,9 @@ parkController.parkEntrance = function (plateInfo) {
     var plateJson = JSON.parse(plateInfo);
 
     var checkAccess = `
-        SELECT plate
-        FROM parkDriver
-        WHERE plate = $1`;
+        SELECT *
+        FROM parkDriver pd, cars c
+        WHERE pd.plate = $1 AND c.plate = $1 AND c.access_park = TRUE`;
 
     var saveEntry = `
         INSERT INTO parkaccess (
@@ -19,21 +19,6 @@ parkController.parkEntrance = function (plateInfo) {
         ) VALUES (
             $1,
             $2,
-            NULL
-        )`;
-
-    var saveEntryOpenTable = `
-        INSERT INTO openparkaccess (
-            plate,
-            date_in,
-            time_in,
-            date_out,
-            time_out
-        ) VALUES (
-            $1,
-            $2,
-            $3,
-            NULL,
             NULL
         )`;
 
