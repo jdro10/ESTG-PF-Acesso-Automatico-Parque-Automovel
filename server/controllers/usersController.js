@@ -4,7 +4,7 @@ var userController = {};
 
 var rollback = function (db) {
     db.query('ROLLBACK');
-  };
+};
 
 userController.create = function (req, res, next) {
     var userInfo = {
@@ -31,11 +31,13 @@ userController.create = function (req, res, next) {
         INSERT INTO cars (
             plate,
             car_brand,
-            car_model
+            car_model,
+            access_park
         ) VALUES (
             $1,
             $2,
-            $3
+            $3,
+            TRUE
         )`;
 
     var queryParkDriver = `
@@ -97,11 +99,13 @@ userController.updateUserCar = function (req, res, next) {
         INSERT INTO cars (
             plate,
             car_brand,
-            car_model
+            car_model,
+            access_park
         ) VALUES (
             $1,
             $2,
-            $3
+            $3,
+            TRUE
         )`;
 
     var queryUpdateUserPlate = `
@@ -112,6 +116,11 @@ userController.updateUserCar = function (req, res, next) {
             $1,
             $2
         )`;
+
+    var queryPlateParkAcess = `
+        UPDATE cars
+        SET access_park = FALSE
+        WHERE plate = $1 AND access_park = TRUE`;
 
     db.query(queryCar, [carInfo.plate, carInfo.car_brand, carInfo.car_model], function (err, resCar) {
         if (err) {
@@ -127,6 +136,16 @@ userController.updateUserCar = function (req, res, next) {
                         error: "Número já existente."
                     });
                 } else {
+                    for (var i = 0; i < resUser.rows.length; i++) {
+                        db.query(queryPlateParkAcess, [resUser.rows[i]['plate']], function (err, resPlate) {
+                            if (err) {
+                                rollback(db);
+                                res.json({
+                                    error: "Erro"
+                                });
+                            }
+                        });
+                    }
                     db.query(queryUpdateUserPlate, [userNumber, carInfo.plate], function (err, resUpdateUser) {
                         if (err) {
                             rollback(db);
@@ -162,7 +181,7 @@ userController.showUsersInfo = function (req, res, next) {
                 error: "Ocorreu um erro"
             });
         } else {
-            res.json({ users: result.rows} );
+            res.json({ users: result.rows });
         }
     });
 };
