@@ -169,7 +169,7 @@ userController.updateUserCar = function (req, res, next) {
     });
 };
 
-userController.showUsersInfo = function (req, res, next) {
+userController.showAllUsersInfo = function (req, res, next) {
     var query = `
         SELECT *
         FROM parkdriver pd, users u, cars c
@@ -186,7 +186,24 @@ userController.showUsersInfo = function (req, res, next) {
     });
 };
 
-userController.showUserEntries = function (req, res, next) {
+userController.showUserInfo = function (req, res, next) {
+    var userNumber = req.params.number;
+
+    var query = `
+        SELECT *
+        FROM users u, parkdriver pd, cars c
+        WHERE u.number = $1 AND pd.number = u.number AND c.plate = pd.plate`;
+
+    db.query(query, [userNumber], function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(result.rows);
+        }
+    });
+};
+
+userController.showUserParkEntries = function (req, res, next) {
     var userNumber = req.params.number;
 
     var query = `
@@ -202,5 +219,62 @@ userController.showUserEntries = function (req, res, next) {
         }
     });
 };
+
+userController.disableUserParkAccess = function (req, res, next) {
+    var userNumber = req.params.number;
+
+    var queryUser = `
+        SELECT pd.plate
+        FROM parkdriver pd, cars c
+        WHERE pd.number = $1 AND pd.plate = c.plate AND c.access_park = TRUE`;
+
+    var queryCar = `
+        UPDATE cars
+        SET access_park = FALSE
+        WHERE plate = $1`;
+
+    db.query(queryUser, [userNumber], function (err, resUser) {
+        if (err) {
+            console.log(err);
+        } else if (resUser.rowCount > 0) {
+            db.query(queryCar, [resUser.rows[0]['plate']], function (err, resCar) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.json({
+                        msg: "Acesso restringido ao número " + userNumber
+                    });
+                }
+            });
+        } else {
+            res.json({
+                msg: "Número introduzido não existe."
+            });
+        }
+    });
+};
+
+userController.enableUserParkAccess = function (req, res, next) {
+    var userPlate = req.params.plate;
+
+    var queryCar = `
+        UPDATE cars
+        SET access_park = TRUE
+        WHERE plate = $1`;
+
+    db.query(queryCar, [userPlate], function (err, resCar) {
+        if(err){
+            console.log(err);
+        } else if(result.rowCount > 0) {
+            res.json({
+                msg: "Acesso dado à matricula " + userPlate
+            });
+        } else {
+            res.json({
+                msg: "Matrícula introduzida não existe"
+            });
+        }
+    });
+}
 
 module.exports = userController;
