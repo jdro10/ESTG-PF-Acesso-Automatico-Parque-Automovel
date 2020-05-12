@@ -136,30 +136,29 @@ userController.updateUserCar = function (req, res, next) {
                         error: "Número já existente."
                     });
                 } else {
-                    for (var i = 0; i < resUser.rows.length; i++) {
-                        db.query(queryPlateParkAcess, [resUser.rows[i]['plate']], function (err, resPlate) {
-                            if (err) {
-                                rollback(db);
-                                res.json({
-                                    error: "Erro"
-                                });
-                            }
-                        });
-                    }
-                    db.query(queryUpdateUserPlate, [userNumber, carInfo.plate], function (err, resUpdateUser) {
+                    db.query(queryPlateParkAcess, [resUser.rows[0]['plate']], function (err, resPlate) {
                         if (err) {
                             rollback(db);
-                            console.log(err);
                             res.json({
-                                error: "Ocorreu um erro."
+                                error: "Erro"
                             });
                         } else {
-                            res.json({
-                                msg: "Dados de utilizador atualizados",
-                                number: userNumber,
-                                plate: carInfo.plate,
-                                car_brand: carInfo.car_brand,
-                                car_model: carInfo.car_model
+                            db.query(queryUpdateUserPlate, [userNumber, carInfo.plate], function (err, resUpdateUser) {
+                                if (err) {
+                                    rollback(db);
+                                    console.log(err);
+                                    res.json({
+                                        error: "Ocorreu um erro."
+                                    });
+                                } else {
+                                    res.json({
+                                        msg: "Dados de utilizador atualizados",
+                                        number: userNumber,
+                                        plate: carInfo.plate,
+                                        car_brand: carInfo.car_brand,
+                                        car_model: carInfo.car_model
+                                    });
+                                }
                             });
                         }
                     });
@@ -263,9 +262,9 @@ userController.enableUserParkAccess = function (req, res, next) {
         WHERE plate = $1`;
 
     db.query(queryCar, [userPlate], function (err, resCar) {
-        if(err){
+        if (err) {
             console.log(err);
-        } else if(result.rowCount > 0) {
+        } else if (result.rowCount > 0) {
             res.json({
                 msg: "Acesso dado à matricula " + userPlate
             });
