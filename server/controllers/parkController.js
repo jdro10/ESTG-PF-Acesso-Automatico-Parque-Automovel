@@ -3,52 +3,43 @@ const db = require('../config/db');
 var parkMode = "CLOSED";
 var parkController = {};
 
-parkController.parkEntrance = function (plateInfo) {
-    var plateJson = JSON.parse(plateInfo);
+parkController.parkEntry = function (plateInfo) {
+    var plateJSON = JSON.parse(plateInfo);
 
-    var checkAccess = `
+    var verifyPlateAccess = `
         SELECT *
-        FROM parkDriver pd, cars c
-        WHERE pd.plate = $1 AND c.plate = $1 AND c.access_park = TRUE`;
+        FROM parkdriver pd, vehicles v
+        WHERE pd.plate = $1 AND v.plate = $1 AND v.access_park = TRUE`;
 
-    var saveEntry = `
-        INSERT INTO parkaccess (
-            plate,
-            date_in,
-            date_out
-        ) VALUES (
-            $1,
-            $2,
-            NULL
-        )`;
+    var saveParkEntry = `
+        INSERT INTO parkaccess (plate, date_in, date_out)
+        VALUES ($1, $2, NULL)`;
 
     if (parkMode === "CLOSED") {
-        db.query(checkAccess, [plateJson['detected_plates']], function (err, result) {
+        db.query(verifyPlateAccess, [plateJSON['plate']], function (err, plateAccessQuery) {
             if (err) {
                 console.log(err);
             } else {
-                if (result.rowCount > 0) {
-                    console.log("Entrada no parque confirmada", plateJson['detected_plates']);
-
-                    db.query(saveEntry, [plateJson['detected_plates'], plateJson['date']], function (err, result) {
+                if (plateAccessQuery.rowCount > 0) {
+                    db.query(saveParkEntry, [plateJSON['plate'], plateJSON['date']], function (err, saveEntryQuery) {
                         if (err) {
                             console.log(err);
                         } else {
+                            console.log("Entrada no parque confirmada:", plateJSON['plate']);
                             console.log("Entrada no parque registada.");
                         }
                     });
                 } else {
-                    console.log("Não pode entrar no parque...", plateJson['detected_plates']);
+                    console.log("Não pode entrar no parque:", plateJSON['plate']);
                 }
             }
         });
     } else {
-        console.log("Entrada no parque confirmada", plateJson['detected_plates']);
-
-        db.query(saveEntry, [plateJson['detected_plates'], plateJson['date']], function (err, result) {
+        db.query(saveParkEntry, [plateJSON['plate'], plateJSON['date']], function (err, saveEntryQuery) {
             if (err) {
                 console.log(err);
             } else {
+                console.log("Entrada no parque confirmada:", plateJSON['plate']);
                 console.log("Entrada no parque registada.");
             }
         });
@@ -56,27 +47,27 @@ parkController.parkEntrance = function (plateInfo) {
 };
 
 parkController.parkExit = function (plateInfo) {
-    var plateJson = JSON.parse(plateInfo);
+    var plateJSON = JSON.parse(plateInfo);
 
-    var savePlateExit = `
+    var saveParkExit = `
         UPDATE parkaccess
         SET date_out = $1, time_out = $2
         WHERE plate = $3 AND date_out IS NULL AND time_out IS NULL`;
 
-    db.query(savePlateExit, [plateJson['date'], plateJson['detected_plates']], function (err, res) {
+    db.query(saveParkExit, [plateJSON['date'], plateJSON['plate']], function (err, saveExitQuery) {
         if (err) {
             console.log(err);
         } else {
             if (res.rowCount > 0) {
-                console.log("Saída registada com sucesso.", plateJson['detected_plates']);
+                console.log("Saída do parque regsitada:", plateJSON['plate']);
             } else {
-                console.log("Saída não registada, matrícula não se encontra no parque.");
+                console.log("Saída não registada, matrícula não encontrada:", plateJSON['plate']);
             }
         }
     });
 };
 
-parkController.changeParkMode = function (req, res) {
+parkController.setParkMode = function (req, res) {
     var pMode = req.body.parkMode;
 
     if (pMode === "OPEN") {
@@ -85,11 +76,15 @@ parkController.changeParkMode = function (req, res) {
         parkMode = "CLOSED";
     }
 
-    res.json({ parkMode: parkMode });
+    res.json({
+        parkMode: parkMode
+    });
 };
 
 parkController.getParkMode = function (req, res) {
-    res.json({ parkMode: parkMode });
+    res.json({
+        parkMode: parkMode
+    });
 };
 
 module.exports = parkController;

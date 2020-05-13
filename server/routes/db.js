@@ -8,7 +8,7 @@ router.post('/', function (req, res, next) {
     dbC.createParkDriverTable(req, res);
     dbC.createParkAccessTable(req, res);
     
-    res.json({msg: "tables created succssfully"})
+    res.json({msg: "tables created successfully"})
 });
 
 module.exports = router;

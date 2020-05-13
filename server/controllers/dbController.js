@@ -22,10 +22,11 @@ dbController.createUserTable = function (req, res) {
 
 dbController.createCarTable = function (req, res) {
     const query = `
-        CREATE TABLE cars (
+        CREATE TABLE vehicles (
             plate VARCHAR,
             car_brand VARCHAR,
             car_model VARCHAR,
+            type VARCHAR,
             access_park BOOLEAN,
             PRIMARY KEY(plate)
         );`;
@@ -45,8 +46,7 @@ dbController.createParkAccessTable = function (req, res) {
             plate VARCHAR,
             date_in TIMESTAMP,
             date_out TIMESTAMP,
-            PRIMARY KEY(plate, date_in),
-            FOREIGN KEY(plate) REFERENCES parkDriver(plate)
+            PRIMARY KEY(plate, date_in)
         );`;
 
     db.query(query, function (err, res) {
@@ -65,7 +65,7 @@ dbController.createParkDriverTable = function (req, res) {
             plate VARCHAR UNIQUE,
             PRIMARY KEY(number, plate),
             FOREIGN KEY(number) REFERENCES users(number),
-            FOREIGN KEY(plate) REFERENCES cars(plate)
+            FOREIGN KEY(plate) REFERENCES vehicles(plate)
         );`;
 
     db.query(query, function (err, res) {
