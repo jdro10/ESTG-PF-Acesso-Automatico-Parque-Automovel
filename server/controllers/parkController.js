@@ -51,18 +51,16 @@ parkController.parkExit = function (plateInfo) {
 
     var saveParkExit = `
         UPDATE parkaccess
-        SET date_out = $1, time_out = $2
-        WHERE plate = $3 AND date_out IS NULL AND time_out IS NULL`;
+        SET date_out = $1
+        WHERE plate = $2 AND date_out IS NULL`;
 
     db.query(saveParkExit, [plateJSON['date'], plateJSON['plate']], function (err, saveExitQuery) {
         if (err) {
             console.log(err);
+        } else if (saveExitQuery.rowCount > 0) {
+            console.log("Saída do parque regsitada:", plateJSON['plate']);
         } else {
-            if (res.rowCount > 0) {
-                console.log("Saída do parque regsitada:", plateJSON['plate']);
-            } else {
-                console.log("Saída não registada, matrícula não encontrada:", plateJSON['plate']);
-            }
+            console.log("Saída não registada, matrícula não encontrada:", plateJSON['plate']);
         }
     });
 };
