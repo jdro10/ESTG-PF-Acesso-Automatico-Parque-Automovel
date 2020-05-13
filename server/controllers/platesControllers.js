@@ -3,7 +3,7 @@ var park = require('../controllers/parkController');
 
 var platesController = {};
 
-amqp.connect('amqp://localhost', function (err, connection) {
+platesController.entries = amqp.connect('amqp://localhost', function (err, connection) {
     if (err) {
         console.log(err);
     } else {
@@ -24,7 +24,13 @@ amqp.connect('amqp://localhost', function (err, connection) {
                 });
             }
         });
+    }
+});
 
+platesController.exits = amqp.connect('amqp://localhost', function (err, connection) {
+    if (err) {
+        console.log(err);
+    } else {
         connection.createChannel(function (err, channel) {
             if (err) {
                 console.log(err);
@@ -44,3 +50,5 @@ amqp.connect('amqp://localhost', function (err, connection) {
         });
     }
 });
+
+module.exports = platesController;
