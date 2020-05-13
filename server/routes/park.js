@@ -6,8 +6,8 @@ router.get('/getParkMode', function(req, res, next){
     park.getParkMode(req, res);
 });
 
-router.put('/changeParkMode', function(req, res, next) {
-    park.changeParkMode(req, res);
+router.put('/setParkMode', function(req, res, next) {
+    park.setParkMode(req, res);
 });
 
 module.exports = router;

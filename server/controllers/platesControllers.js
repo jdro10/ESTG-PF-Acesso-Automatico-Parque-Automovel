@@ -18,7 +18,7 @@ amqp.connect('amqp://localhost', function (err, connection) {
                 });
 
                 channel.consume(entryQueue, function (msg) {
-                    park.parkEntrance(msg.content.toString());
+                    park.parkEntry(msg.content.toString());
                 }, {
                     noAck: true
                 });

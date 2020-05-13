@@ -61,7 +61,7 @@ class PlateDetection:
 
         car_info = {
             "date": date_time,
-            "detected_plates": self.plate_list[0]
+            "plate": self.plate_list[0]
         }
 
         car_info_json = json.dumps(car_info)
