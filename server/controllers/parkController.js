@@ -1,4 +1,6 @@
 const db = require('../config/db');
+var platesC = require('../controllers/platesControllers');
+//import { toqueue } from '../controllers/platesControllers';
 
 var parkMode = "CLOSED";
 var parkController = {};
@@ -27,6 +29,7 @@ parkController.parkEntry = function (plateInfo) {
                         } else {
                             console.log("Entrada no parque confirmada:", plateJSON['plate']);
                             console.log("Entrada no parque registada.");
+                            platesC.toqueue("entry_queue_p", "in");
                         }
                     });
                 } else {
@@ -58,7 +61,8 @@ parkController.parkExit = function (plateInfo) {
         if (err) {
             console.log(err);
         } else if (saveExitQuery.rowCount > 0) {
-            console.log("Saída do parque regsitada:", plateJSON['plate']);
+            console.log("Saída do parque registada:", plateJSON['plate']);
+            platesC.toqueue("entry_queue_p", "in");
         } else {
             console.log("Saída não registada, matrícula não encontrada:", plateJSON['plate']);
         }

@@ -2,6 +2,13 @@ var amqp = require('amqplib/callback_api');
 var park = require('../controllers/parkController');
 
 var platesController = {};
+var ch = null;
+
+amqp.connect('amqp://localhost', function (err, conn) {
+    conn.createChannel(function (err, channel) {
+       ch = channel;
+    });
+ });
 
 platesController.entries = amqp.connect('amqp://localhost', function (err, connection) {
     if (err) {
@@ -51,4 +58,8 @@ platesController.exits = amqp.connect('amqp://localhost', function (err, connect
     }
 });
 
-module.exports = platesController;
+function toqueue(queueName, data){
+    ch.sendToQueue(queueName, new Buffer(data));
+};
+
+module.exports.toqueue = toqueue;
