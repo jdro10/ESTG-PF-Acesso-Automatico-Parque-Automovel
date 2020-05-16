@@ -2,6 +2,8 @@ import cv2
 import datetime
 import urllib.request
 import numpy as np
+from threading import Thread
+from park_access import ParkAccess
 from plate_detection import PlateDetection
 
 class ExitPlateDetection(PlateDetection):
@@ -41,8 +43,12 @@ class ExitPlateDetection(PlateDetection):
 
 
 def main():
+    p = ParkAccess("exit_queue_p")
     exit = ExitPlateDetection()
-    exit.read_stream()
+    threadSemaforo = Thread(target=p.loop)
+    threadLeituraMatricula = Thread(target=exit.read_stream)
+    threadSemaforo.start()
+    threadLeituraMatricula.start()
 
 if __name__ == "__main__":
     main()

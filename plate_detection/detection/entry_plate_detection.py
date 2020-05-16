@@ -2,6 +2,9 @@ import cv2
 import datetime
 import urllib.request
 import numpy as np
+import pygame
+from threading import Thread
+from park_access import ParkAccess
 from plate_detection import PlateDetection
 
 class EntryPlateDetection(PlateDetection):
@@ -41,8 +44,12 @@ class EntryPlateDetection(PlateDetection):
 
 
 def main():
+    p = ParkAccess("entry_queue_p")
     entry = EntryPlateDetection()
-    entry.read_stream()
+    threadSemaforo = Thread(target=p.loop)
+    threadLeituraMatricula = Thread(target=entry.read_stream)
+    threadSemaforo.start()
+    threadLeituraMatricula.start()
 
 if __name__ == "__main__":
     main()
