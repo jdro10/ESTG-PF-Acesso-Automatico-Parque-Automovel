@@ -1,7 +1,6 @@
 import pygame
 import pika
 import time
-import threading
 from threading import Thread
 
 class ParkAccess:
@@ -12,6 +11,7 @@ class ParkAccess:
         self.red = (255, 0, 0)
         self.green = (0,128,0)
         self.white = (255, 255, 255)
+        self.black = (0, 0, 0)
         self.display_width = 250
         self.display_height = 125
         self.display = pygame.display.set_mode((self.display_width, self.display_height))
@@ -46,14 +46,17 @@ class ParkAccess:
                     thread.join()
                     running = False
 
-            self.display.fill(self.white)
-            if self.msg == 'in':
-                self.circle(int(self.display_width/2), int(self.display_height/2), self.green)
-            else:
-                self.circle(int(self.display_width/2), int(self.display_height/2), self.red)
+            self.display.fill(self.black)
+            self.circle(75, int(self.display_height/2), self.white)
+            self.circle(175, int(self.display_height/2), self.white)
+
+            if self.msg == 'allowed':
+                self.circle(75, int(self.display_height/2), self.green)
+            elif self.msg == 'denied':
+                self.circle(175, int(self.display_height/2), self.red)
 
             pygame.display.update()
-            if self.msg == 'in':
+            if self.msg == 'allowed' or self.msg == 'denied':
                 time.sleep(3)
                 self.msg = None
 

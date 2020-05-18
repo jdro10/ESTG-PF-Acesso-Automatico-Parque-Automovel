@@ -58,8 +58,8 @@ platesController.exits = amqp.connect('amqp://localhost', function (err, connect
     }
 });
 
-function toqueue(queueName, data){
-    ch.sendToQueue(queueName, new Buffer(data));
+function accessResponse(queueName, data){
+    ch.sendToQueue(queueName, new Buffer.from(data));
 };
 
-module.exports.toqueue = toqueue;
+module.exports.accessResponse = accessResponse;
