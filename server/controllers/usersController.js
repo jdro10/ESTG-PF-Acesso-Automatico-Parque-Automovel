@@ -103,7 +103,7 @@ userController.updateUserCar = function (req, res, next) {
             db.query(queryUserPlate, [userNumber], function (err, resUserQuery) {
                 if (err) {
                     rollback(db);
-                    
+
                     res.json({
                         error: "Número já existente."
                     });
@@ -111,7 +111,7 @@ userController.updateUserCar = function (req, res, next) {
                     db.query(queryPlateParkAcess, [resUserQuery.rows[0]['plate']], function (err, resPlateQuery) {
                         if (err) {
                             rollback(db);
-                            
+
                             res.json({
                                 error: "Erro"
                             });
@@ -170,7 +170,9 @@ userController.showUserInfo = function (req, res, next) {
 
     db.query(query, [userNumber], function (err, resUserQuery) {
         if (err) {
-            console.log(err);
+            res.json({
+                error: "Ocorreu um erro."
+            });
         } else {
             res.json({
                 user: resUserQuery.rows
@@ -189,7 +191,9 @@ userController.showUserParkEntries = function (req, res, next) {
 
     db.query(query, [userNumber], function (err, resUserEntries) {
         if (err) {
-            console.log(err);
+            res.json({
+                error: "Ocorreu um erro."
+            });
         } else {
             res.json({
                 userEntries: resUserEntries.rows
@@ -198,24 +202,26 @@ userController.showUserParkEntries = function (req, res, next) {
     });
 };
 
-userController.showParkAccess = function(req, res, next) {
+userController.showParkAccess = function (req, res, next) {
     var query = `
         SELECT *
         FROM users u, parkdriver pd, parkaccess pa, vehicles v
         WHERE pd.number = u.number AND pa.plate = pd.plate AND v.plate = pd.plate`;
 
-    db.query(query, function(err, resParkAcess) {
-        if(err){
-            console.log(err);
-        } else{
+    db.query(query, function (err, resParkAcess) {
+        if (err) {
+            res.json({
+                error: "Ocorreu um erro."
+            });
+        } else {
             res.json(
                 resParkAcess.rows
             );
         }
     });
-}
+};
 
-userController.showParkAccessByDate = function(req, res, next) {
+userController.showParkAccessByDate = function (req, res, next) {
     var date = req.params.date + " 00:00:00";
 
     var query = `
@@ -223,16 +229,18 @@ userController.showParkAccessByDate = function(req, res, next) {
         FROM users u, parkdriver pd, parkaccess pa, vehicles v
         WHERE pd.number = u.number AND pa.plate = pd.plate AND v.plate = pd.plate AND pa.date_in BETWEEN $1 AND $1 + interval '1 day'`;
 
-    db.query(query, [date], function(err, resParkAcessDate) {
-        if(err){
-            console.log(err);
-        } else{
+    db.query(query, [date], function (err, resParkAcessDate) {
+        if (err) {
+            res.json({
+                error: "Ocorreu um erro."
+            });
+        } else {
             res.json(
                 resParkAcessDate.rows
             );
         }
     });
-}
+};
 
 userController.disableUserParkAccess = function (req, res, next) {
     var userNumber = req.params.number;
@@ -249,11 +257,15 @@ userController.disableUserParkAccess = function (req, res, next) {
 
     db.query(queryUser, [userNumber], function (err, resUserQuery) {
         if (err) {
-            console.log(err);
+            res.json({
+                error: "Ocorreu um erro."
+            });
         } else if (resUserQuery.rowCount > 0) {
             db.query(queryVehicle, [resUser.rows[0]['plate']], function (err, resVehicleQuery) {
                 if (err) {
-                    console.log(err);
+                    res.json({
+                        error: "Ocorreu um erro."
+                    });
                 } else {
                     res.json({
                         userNumber: userNumber,
@@ -279,7 +291,9 @@ userController.enableUserParkAccess = function (req, res, next) {
 
     db.query(queryVehicle, [userPlate], function (err, resVehicleQuery) {
         if (err) {
-            console.log(err);
+            res.json({
+                error: "Ocorreu um erro."
+            });
         } else if (resVehicleQuery.rowCount > 0) {
             res.json({
                 plate: userPlate,
