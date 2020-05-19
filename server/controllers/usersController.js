@@ -208,9 +208,28 @@ userController.showParkAccess = function(req, res, next) {
         if(err){
             console.log(err);
         } else{
-            res.json({
-                parkAccess: resParkAcess.rows
-            });
+            res.json(
+                resParkAcess.rows
+            );
+        }
+    });
+}
+
+userController.showParkAccessByDate = function(req, res, next) {
+    var date = req.params.date + " 00:00:00";
+
+    var query = `
+        SELECT *
+        FROM users u, parkdriver pd, parkaccess pa, vehicles v
+        WHERE pd.number = u.number AND pa.plate = pd.plate AND v.plate = pd.plate AND pa.date_in BETWEEN $1 AND $1 + interval '1 day'`;
+
+    db.query(query, [date], function(err, resParkAcessDate) {
+        if(err){
+            console.log(err);
+        } else{
+            res.json(
+                resParkAcessDate.rows
+            );
         }
     });
 }
