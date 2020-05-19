@@ -198,6 +198,23 @@ userController.showUserParkEntries = function (req, res, next) {
     });
 };
 
+userController.showParkAccess = function(req, res, next) {
+    var query = `
+        SELECT *
+        FROM users u, parkdriver pd, parkaccess pa, vehicles v
+        WHERE pd.number = u.number AND pa.plate = pd.plate AND v.plate = pd.plate`;
+
+    db.query(query, function(err, resParkAcess) {
+        if(err){
+            console.log(err);
+        } else{
+            res.json({
+                parkAccess: resParkAcess.rows
+            });
+        }
+    });
+}
+
 userController.disableUserParkAccess = function (req, res, next) {
     var userNumber = req.params.number;
 
