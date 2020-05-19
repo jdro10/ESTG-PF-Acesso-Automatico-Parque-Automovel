@@ -28,12 +28,11 @@ parkController.parkEntry = function (plateInfo) {
                         } else {
                             plates.accessResponse("entry_queue_p", "allowed");
                             console.log("Entrada no parque confirmada:", plateJSON['plate']);
-                            console.log("Entrada no parque registada.");
                         }
                     });
                 } else {
                     plates.accessResponse("entry_queue_p", "denied");
-                    console.log("Não pode entrar no parque:", plateJSON['plate']);
+                    console.log("Entrada no parque negada:", plateJSON['plate']);
                 }
             }
         });
@@ -43,7 +42,6 @@ parkController.parkEntry = function (plateInfo) {
                 console.log(err);
             } else {
                 console.log("Entrada no parque confirmada:", plateJSON['plate']);
-                console.log("Entrada no parque registada.");
             }
         });
     }
