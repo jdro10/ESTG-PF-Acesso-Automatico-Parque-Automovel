@@ -6,6 +6,10 @@ router.get('/', function(req, res, next) {
   user.showAllUsersInfo(req, res);
 });
 
+router.get('/showParkAccessByDate/:date', function(req, res, next) {
+  user.showParkAccessByDate(req, res);
+});
+
 router.post('/createUser', function(req, res, next){
   user.create(req, res);
 });
