@@ -1,0 +1,14 @@
+.sidebarDiv {
+  position: absolute;
+  width: 15%;
+  height: 100%;
+  top: 6.2%;
+  left: 0%;
+  border-right: 1px solid #475d88;
+  background-color: #F8F8F8;
+}
+
+.sidebarInfo {
+  position: absolute;
+  width: 100%;
+}
