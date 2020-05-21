@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ParkAccess } from '../models/ParkAccess';
-import { Observable } from 'rxjs';
-
-const HttpOptions = {
-  headers: new HttpHeaders( {
-    'Content-Type': 'application/json'
-  })
-}
+import { Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParkAccessService {
-  parkAccessUrl: string = "http://localhost:3000/users/parkAccess";
+  //private sharedData = new BehaviorSubject('2020-05-16')
+  //currentData = this.sharedData.asObservable();
+  parkAccessUrl: string = "http://localhost:3000/users/showParkAccessByDate/";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getParkAccess(): Observable<ParkAccess[]> {
-    return this.http.get<ParkAccess[]>(this.parkAccessUrl);
+  //changeData(data: string){
+  //  this.sharedData.next(data);
+  //}
+
+  getParkAccess(date: string): Observable<ParkAccess[]> {
+    return this.http.get<ParkAccess[]>(this.parkAccessUrl + date);
   }
 }

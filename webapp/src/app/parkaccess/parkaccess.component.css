@@ -1,0 +1,42 @@
+.tableDiv {
+    position: absolute;
+    top: 13%;
+    width: 50%;
+    left: 25%;
+}
+
+.formDiv {
+    position: absolute;
+    left: 30%; 
+    top: 7.5%;
+    left: 61.8%;
+}
+
+.buttonDiv {
+    position: absolute;
+    left: 100%;
+}
+
+.buttonsDiv {
+    position: absolute;
+    top: 7.5%;
+    left: 25%;
+}
+
+.noAccessDiv {
+    position: absolute;
+    top: 20%;
+    left: 35%;
+}
+
+.currentData {
+    position: absolute;
+    top: 9%;
+    left: 45%;
+}
+
+.olderDates {
+    position: absolute;
+    top: 9%;
+    left: 45%;
+}

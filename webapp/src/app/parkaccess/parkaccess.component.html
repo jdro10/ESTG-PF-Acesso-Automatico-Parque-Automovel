@@ -1,33 +1,59 @@
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th scope="col">Número</th>
-    <th scope="col">Nome</th>
-    <th scope="col">Matrícula</th>
-    <th scope="col">Carro</th>
-    <th scope="col">Data entrada</th>
-    <th scope="col">Data Saída</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let user of parkAccess">
-    <th scope="row">{{ user.number }}</th>
-    <td>{{ user.firstname }} {{ user.lastname}}</td>
-    <td>{{ user.plate }}</td>
-    <td>{{ user.car_brand }} {{ user.car_model }}</td>
-    <td>{{ user.date_in}}</td>
-    <td>{{ user.date_out}}</td>
-  </tr>
-  </tbody>
-</table>
+<div>
 
-<div class="d-flex justify-content-between p-2">
-    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize">
-    </ngb-pagination>
-  
-    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
-      <option [ngValue]="2">2 items per page</option>
-      <option [ngValue]="4">4 items per page</option>
-      <option [ngValue]="6">6 items per page</option>
-    </select>
+  <div class="currentData" *ngIf="dateString == null; else newData">
+    <p>Data: {{ todayDate() }}</p>
   </div>
+  <ng-template #newData>
+    <div class="olderDates">
+      <p>Data: {{ dateString }}</p>
+    </div>
+  </ng-template>
+
+
+  <div class="formDiv">
+    <form class="form-inline">
+      <input class="form-control mr-sm-2" type="search" placeholder="EX: 2020-05-21" aria-label="Procurar"
+        id="dataSearch">
+      <div class = "buttonDiv">
+        <button type="button" class="btn btn-outline-primary" (click)="searchDate()">Procurar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="buttonsDiv">
+    <button type="button" class="btn btn-outline-primary" (click)="nextDay()">Dia seguinte</button>
+    <button type="button" class="btn btn-outline-primary" (click)="dayBefore()">Dia anterior</button>
+  </div>
+
+  <div *ngIf="parkAccess.length > 0; else noAccess" class="tableDiv">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Número</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Matrícula</th>
+        <th scope="col">Carro</th>
+        <th scope="col">Data entrada</th>
+        <th scope="col">Data Saída</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of parkAccess">
+        <th scope="row">{{ user.number }}</th>
+        <td>{{ user.firstname }} {{ user.lastname}}</td>
+        <td>{{ user.plate }}</td>
+        <td>{{ user.car_brand }} {{ user.car_model }}</td>
+        <td>{{ user.date_in}}</td>
+        <td>{{ user.date_out}}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <ng-template #noAccess>
+    <div class="noAccessDiv">
+      <h1>Não existem acessos ao parque neste dia</h1>
+    </div>
+  </ng-template>
+
+</div>
+
