@@ -59,9 +59,11 @@ parkController.parkExit = function (plateInfo) {
         if (err) {
             console.log(err);
         } else if (saveExitQuery.rowCount > 0) {
+            plates.accessResponse("exit_queue_p", "allowed");
             console.log("Saída do parque registada:", plateJSON['plate']);
-            plates.accessResponse("exit_queue_p", "in");
+            
         } else {
+            plates.accessResponse("exit_queue_p", "denied");
             console.log("Saída não registada, matrícula não encontrada:", plateJSON['plate']);
         }
     });
