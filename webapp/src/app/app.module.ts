@@ -12,6 +12,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SignupComponent } from './signup/signup.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { UsersComponent } from './users/users.component';
+import { UserdetailsComponent } from './userdetails/userdetails.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { UsersComponent } from './users/users.component';
     SignupComponent,
     HomepageComponent,
     UsersComponent,
+    UserdetailsComponent,
   ],
   imports: [
     BrowserModule,

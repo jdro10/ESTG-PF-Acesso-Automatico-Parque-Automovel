@@ -1,0 +1,30 @@
+<div>
+    <div class="tableDiv">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Número</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">Carro</th>
+                    <th scope="col">Data entrada</th>
+                    <th scope="col">Data saída</th>
+                    <th scope="col">Tipo de veículo</th>    
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of user">
+                    <th scope="row">{{ user.number }}</th>
+                    <td>{{ user.firstname }} {{ user.lastname }}</td>
+                    <td>{{ user.plate }}</td>
+                    <td>{{ user.car_brand }} {{ user.car_model }}</td>
+                    <td>{{ user.date_in }}</td>
+                    <td>{{ user.date_out }}</td>
+                    <td>{{ user.type }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<app-sidebar></app-sidebar>
+<app-navbar></app-navbar>

@@ -15,6 +15,7 @@ const httpOptions = {
 export class UserService {
   addUserUrl: string = "http://localhost:3000/users/createUser";
   getUsersUrl: string = "http://localhost:3000/users";
+  getUserDetailsUrl: string = "http://localhost:3000/users/userEntries/";
 
   constructor(private http: HttpClient) { }
 
@@ -24,5 +25,9 @@ export class UserService {
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.getUsersUrl);
+  }
+
+  getUserDetails(number: string): Observable<User[]> {
+    return this.http.get<User[]>(this.getUserDetailsUrl + number);
   }
 }
