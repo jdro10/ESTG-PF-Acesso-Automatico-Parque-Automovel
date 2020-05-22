@@ -7,16 +7,11 @@ import { Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class ParkAccessService {
-  //private sharedData = new BehaviorSubject('2020-05-16')
-  //currentData = this.sharedData.asObservable();
+
   parkAccessUrl: string = "http://localhost:3000/users/showParkAccessByDate/";
 
   constructor(private http: HttpClient) {}
-
-  //changeData(data: string){
-  //  this.sharedData.next(data);
-  //}
-
+  
   getParkAccess(date: string): Observable<ParkAccess[]> {
     return this.http.get<ParkAccess[]>(this.parkAccessUrl + date);
   }
