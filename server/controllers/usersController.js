@@ -153,9 +153,7 @@ userController.showAllUsersInfo = function (req, res, next) {
                 error: "Ocorreu um erro"
             });
         } else {
-            res.json({
-                users: resUsersInfo.rows
-            });
+            res.json(resUsersInfo.rows);
         }
     });
 };
@@ -195,9 +193,7 @@ userController.showUserParkEntries = function (req, res, next) {
                 error: "Ocorreu um erro."
             });
         } else {
-            res.json({
-                userEntries: resUserEntries.rows
-            });
+            res.json(resUserEntries.rows);
         }
     });
 };
