@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChange } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ParkAccessService } from '../services/park-access.service';
 import { ParkAccess } from '../models/ParkAccess';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';

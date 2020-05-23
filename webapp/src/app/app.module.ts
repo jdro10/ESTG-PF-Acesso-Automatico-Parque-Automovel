@@ -13,6 +13,7 @@ import { SignupComponent } from './signup/signup.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { UsersComponent } from './users/users.component';
 import { UserdetailsComponent } from './userdetails/userdetails.component';
+import { ParkmodeComponent } from './parkmode/parkmode.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { UserdetailsComponent } from './userdetails/userdetails.component';
     HomepageComponent,
     UsersComponent,
     UserdetailsComponent,
+    ParkmodeComponent,
   ],
   imports: [
     BrowserModule,
