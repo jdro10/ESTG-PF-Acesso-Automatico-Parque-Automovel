@@ -225,14 +225,36 @@ userController.showParkAccessByDate = function (req, res, next) {
         FROM users u, parkdriver pd, parkaccess pa, vehicles v
         WHERE pd.number = u.number AND pa.plate = pd.plate AND v.plate = pd.plate AND pa.date_in BETWEEN $1 AND $1 + interval '1 day'`;
 
-    db.query(query, [date], function (err, resParkAcessDate) {
+    db.query(query, [date], function (err, resParkAccessDate) {
         if (err) {
             res.json({
                 error: "Ocorreu um erro."
             });
         } else {
             res.json(
-                resParkAcessDate.rows
+                resParkAccessDate.rows
+            );
+        }
+    });
+};
+
+userController.showOpenParkAccessByDate = function(req, res, next){
+    var date = req.params.date + " 00:00:00";
+
+    var query = `
+    SELECT *
+    FROM parkaccess
+    WHERE plate NOT IN (SELECT plate FROM parkdriver) AND date_in BETWEEN $1 AND $1 + interval '1 day'`;
+    
+    db.query(query, [date], function(err, resOpenParkAccess) {
+        if(err){
+            console.log(err);
+            res.json({
+                error: "Ocorreu um erro."
+            });
+        } else {
+            res.json(
+                resOpenParkAccess.rows
             );
         }
     });
