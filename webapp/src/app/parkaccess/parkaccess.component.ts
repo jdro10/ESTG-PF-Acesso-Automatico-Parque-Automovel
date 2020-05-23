@@ -13,20 +13,19 @@ export class ParkaccessComponent implements OnInit {
   parkAccess: ParkAccess[];
   openParkAccess: ParkAccess[];
   date: NgbDateStruct;
-  todayDateS: string;
+  todayDateString: string;
   nDate: Date;
   dateString: string;
   lastdate: Date;
+  page = 1;
+  pageSize = 10;
+  collectionSize: number;
+  allAccess: ParkAccess[];
 
   constructor(private parkAccessService: ParkAccessService, private calendar: NgbCalendar) { }
 
   ngOnInit(): void {
-    this.parkAccessService.getParkAccess(this.todayDate()).subscribe(parkAccess => {
-      this.parkAccess = parkAccess;
-    });
-    this.parkAccessService.getOpenParkAccess(this.todayDate()).subscribe(openParkAccess => {
-      this.openParkAccess = openParkAccess;
-    });
+    this.httpRequests(this.todayDate());
     this.lastdate = new Date(this.date.year, this.date.month, this.date.day);
   }
 
@@ -34,9 +33,9 @@ export class ParkaccessComponent implements OnInit {
     this.date = this.calendar.getToday();
 
     if (this.date.month >= 1 && this.date.month < 10) {
-      return this.todayDateS = this.date.year + '-0' + this.date.month + '-' + this.date.day;
+      return this.todayDateString = this.date.year + '-0' + this.date.month + '-' + this.date.day;
     } else {
-      return this.todayDateS = this.date.year + '-' + this.date.month + '-' + this.date.day;
+      return this.todayDateString = this.date.year + '-' + this.date.month + '-' + this.date.day;
     }
   }
 
@@ -89,18 +88,23 @@ export class ParkaccessComponent implements OnInit {
   dayBefore(): void {
     var date = this.backDate();
     
-    this.parkAccessService.getParkAccess(date).subscribe(parkAccess => {
-      this.parkAccess = parkAccess;
-    });
-
-    this.parkAccessService.getOpenParkAccess(date).subscribe(openParkAccess => {
-      this.openParkAccess = openParkAccess;
-    });
+    this.httpRequests(date);
   }
 
   nextDay(): void {
     var date = this.upDate();
 
+    this.httpRequests(date);
+  }
+
+  searchDate(): void {
+    var inputDate = (<HTMLInputElement>document.getElementById("dataSearch")).value;
+
+    this.dateString = inputDate;
+    this.httpRequests(inputDate);
+  }
+
+  httpRequests(date: string): void {
     this.parkAccessService.getParkAccess(date).subscribe(parkAccess => {
       this.parkAccess = parkAccess;
     });
@@ -110,11 +114,12 @@ export class ParkaccessComponent implements OnInit {
     });
   }
 
-  searchDate(): void {
-    var inputDate = (<HTMLInputElement>document.getElementById("dataSearch")).value;
+  get parkAccessAll(): ParkAccess[] {
+    this.collectionSize = this.parkAccess.length + this.openParkAccess.length;
+    this.allAccess = this.parkAccess.concat(this.openParkAccess);
 
-    this.parkAccessService.getParkAccess(inputDate).subscribe(parkAccess => {
-      this.parkAccess = parkAccess;
-    });
+    return this.allAccess
+      .map((userparkaccess, i) => ({id: i + 1, ...userparkaccess}))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 }
