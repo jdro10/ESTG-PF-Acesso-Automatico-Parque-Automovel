@@ -1,0 +1,9 @@
+.footerDiv {
+    position: absolute;
+    top: 96%;
+    border-top: 1px solid #475d88;
+    width: 85%;
+    left: 15%;
+    background-color: #F8F8F8;
+    text-align: center;
+}

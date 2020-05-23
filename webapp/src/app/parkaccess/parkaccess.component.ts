@@ -17,6 +17,10 @@ export class ParkaccessComponent implements OnInit {
   nDate: Date;
   dateString: string;
   lastdate: Date;
+  page = 1;
+  pageSize = 10;
+  collectionSize: number;
+  allAccess: ParkAccess[];
 
   constructor(private parkAccessService: ParkAccessService, private calendar: NgbCalendar) { }
 
@@ -108,5 +112,14 @@ export class ParkaccessComponent implements OnInit {
     this.parkAccessService.getOpenParkAccess(date).subscribe(openParkAccess => {
       this.openParkAccess = openParkAccess;
     });
+  }
+
+  get parkAccessAll(): ParkAccess[] {
+    this.collectionSize = this.parkAccess.length + this.openParkAccess.length;
+    this.allAccess = this.parkAccess.concat(this.openParkAccess);
+
+    return this.allAccess
+      .map((userparkaccess, i) => ({id: i + 1, ...userparkaccess}))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 }

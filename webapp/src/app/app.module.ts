@@ -14,6 +14,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { UsersComponent } from './users/users.component';
 import { UserdetailsComponent } from './userdetails/userdetails.component';
 import { ParkmodeComponent } from './parkmode/parkmode.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ParkmodeComponent } from './parkmode/parkmode.component';
     UsersComponent,
     UserdetailsComponent,
     ParkmodeComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
