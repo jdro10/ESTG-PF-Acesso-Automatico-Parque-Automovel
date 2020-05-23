@@ -11,6 +11,9 @@ import { ActivatedRoute } from '@angular/router';
 export class UserdetailsComponent implements OnInit {
   user: User[];
   userNumber: string;
+  page = 1;
+  pageSize = 10;
+  collectionSize: number;
 
   constructor(private userService: UserService, private route: ActivatedRoute) { }
 
@@ -19,5 +22,13 @@ export class UserdetailsComponent implements OnInit {
     this.userService.getUserDetails(this.userNumber).subscribe(users => {
       this.user = users;
     });
+  }
+
+  get userDetails(): User[] {
+    this.collectionSize = this.user.length;
+
+    return this.user
+      .map((userdetails, i) => ({id: i + 1, ...userdetails}))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 }

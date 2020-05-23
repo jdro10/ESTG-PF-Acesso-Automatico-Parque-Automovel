@@ -4,3 +4,9 @@
     width: 50%;
     left: 25%;
 }
+
+.noUsersDiv {
+    position: absolute;
+    top: 20%;
+    left: 35%;
+}
