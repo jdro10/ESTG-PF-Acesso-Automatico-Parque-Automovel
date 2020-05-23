@@ -25,7 +25,7 @@
     <button type="button" class="btn btn-outline-primary" (click)="dayBefore()">Dia anterior</button>
   </div>
 
-  <div *ngIf="parkAccess.length > 0; else noAccess" class="tableDiv">
+  <div *ngIf="parkAccess.length > 0 || openParkAccess.length > 0; else noAccess" class="tableDiv">
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>
@@ -46,6 +46,14 @@
         <td>{{ user.date_in}}</td>
         <td>{{ user.date_out}}</td>
       </tr>
+      <tr *ngFor="let openuser of openParkAccess">
+        <th scope="row"> - </th>
+        <td> - </td>
+        <td>{{ openuser.plate }}</td>
+        <td> - </td>
+        <td>{{ openuser.date_in}}</td>
+        <td>{{ openuser.date_out}}</td>
+      </tr>
     </tbody>
   </table>
   </div>
@@ -56,4 +64,6 @@
   </ng-template>
 
 </div>
+
+<app-parkmode></app-parkmode>
 
