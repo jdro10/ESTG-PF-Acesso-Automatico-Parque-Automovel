@@ -9,21 +9,25 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./parkaccess.component.css']
 })
 export class ParkaccessComponent implements OnInit {
-  
+
   parkAccess: ParkAccess[];
+  openParkAccess: ParkAccess[];
   date: NgbDateStruct;
   todayDateS: string;
   nDate: Date;
   dateString: string;
-  count: number;
+  lastdate: Date;
 
   constructor(private parkAccessService: ParkAccessService, private calendar: NgbCalendar) { }
 
   ngOnInit(): void {
-    this.count = 0;
     this.parkAccessService.getParkAccess(this.todayDate()).subscribe(parkAccess => {
       this.parkAccess = parkAccess;
     });
+    this.parkAccessService.getOpenParkAccess(this.todayDate()).subscribe(openParkAccess => {
+      this.openParkAccess = openParkAccess;
+    });
+    this.lastdate = new Date(this.date.year, this.date.month, this.date.day);
   }
 
   todayDate(): string {
@@ -36,11 +40,11 @@ export class ParkaccessComponent implements OnInit {
     }
   }
 
-  traverseDate(): string {
-    this.count++;
-    this.nDate = new Date(this.date.year, this.date.month, this.date.day - this.count);
+  backDate(): string {
+    this.nDate = this.lastdate;
+    this.nDate.setDate(this.lastdate.getDate() - 1);
 
-    if (this.date.month >= 1 && this.date.month < 10) {
+    if (this.nDate.getMonth() >= 1 && this.nDate.getMonth() < 10) {
       if (this.nDate.getDate() >= 1 && this.nDate.getDate() < 10) {
         this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-0" + this.nDate.getDate();
       } else {
@@ -53,13 +57,15 @@ export class ParkaccessComponent implements OnInit {
         this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-" + this.nDate.getDate();
       }
     }
+
+    this.lastdate = this.nDate;
 
     return this.dateString;
   }
 
-  traverseDate2(): string {
-    this.count++;
-    this.nDate = new Date(this.date.year, this.date.month, this.date.day + this.count);
+  upDate(): string {
+    this.nDate = this.lastdate;
+    this.nDate.setDate(this.lastdate.getDate() + 1);
 
     if (this.date.month >= 1 && this.date.month < 10) {
       if (this.nDate.getDate() >= 1 && this.nDate.getDate() < 10) {
@@ -74,18 +80,33 @@ export class ParkaccessComponent implements OnInit {
         this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-" + this.nDate.getDate();
       }
     }
+
+    this.lastdate = this.nDate;
+
     return this.dateString;
   }
 
   dayBefore(): void {
-    this.parkAccessService.getParkAccess(this.traverseDate()).subscribe(parkAccess => {
+    var date = this.backDate();
+    
+    this.parkAccessService.getParkAccess(date).subscribe(parkAccess => {
       this.parkAccess = parkAccess;
+    });
+
+    this.parkAccessService.getOpenParkAccess(date).subscribe(openParkAccess => {
+      this.openParkAccess = openParkAccess;
     });
   }
 
   nextDay(): void {
-    this.parkAccessService.getParkAccess(this.traverseDate2()).subscribe(parkAccess => {
+    var date = this.upDate();
+
+    this.parkAccessService.getParkAccess(date).subscribe(parkAccess => {
       this.parkAccess = parkAccess;
+    });
+
+    this.parkAccessService.getOpenParkAccess(date).subscribe(openParkAccess => {
+      this.openParkAccess = openParkAccess;
     });
   }
 

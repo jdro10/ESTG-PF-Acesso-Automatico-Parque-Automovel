@@ -9,10 +9,15 @@ import { Observable} from 'rxjs';
 export class ParkAccessService {
 
   parkAccessUrl: string = "http://localhost:3000/users/showParkAccessByDate/";
+  openParkAccessUrl: string = "http://localhost:3000/users/showOpenParkAccessByDate/"
 
   constructor(private http: HttpClient) {}
   
   getParkAccess(date: string): Observable<ParkAccess[]> {
     return this.http.get<ParkAccess[]>(this.parkAccessUrl + date);
+  }
+
+  getOpenParkAccess(date: string): Observable<ParkAccess[]> {
+    return this.http.get<ParkAccess[]>(this.openParkAccessUrl + date);
   }
 }
