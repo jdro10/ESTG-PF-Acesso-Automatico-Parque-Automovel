@@ -88,7 +88,7 @@ userController.updateUserCar = function (req, res, next) {
         INSERT INTO parkdriver (number, plate)
         VALUES ($1, $2)`;
 
-    var queryPlateParkAcess = `
+    var queryPlateParkAccess = `
         UPDATE vehicles
         SET access_park = FALSE
         WHERE plate = $1 AND access_park = TRUE`;
@@ -110,7 +110,7 @@ userController.updateUserCar = function (req, res, next) {
                             error: "Número já existente."
                         });
                     } else {
-                        db.query(queryPlateParkAcess, [resUserQuery.rows[0]['plate']], function (err, resPlateQuery) {
+                        db.query(queryPlateParkAccess, [resUserQuery.rows[0]['plate']], function (err, resPlateQuery) {
                             if (err) {
                                 rollback(db);
 
@@ -150,7 +150,8 @@ userController.showAllUsersInfo = function (req, res, next) {
     var query = `
         SELECT *
         FROM parkdriver pd, users u, vehicles v
-        WHERE pd.number = u.number AND pd.plate = v.plate`;
+        WHERE pd.number = u.number AND pd.plate = v.plate
+        ORDER BY pd.number`;
 
     db.query(query, function (err, resUsersInfo) {
         if (err) {
