@@ -35,26 +35,20 @@ export class UserupdateComponent implements OnInit {
   }
 
   open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result;
   }
 
   onSubmit() {
     this.user = this.updateForm.value;
 
-    this.userService.updateUser(this.user).subscribe(userRes => { this.userRes = userRes, console.log("asd" + this.userRes)});
+    this.userService.updateUser(this.user).subscribe(userRes => { this.userRes = userRes, this.alert()});
+  }
+
+  alert(){
+    if(this.userRes.number){
+      alert("Novo carro adicionado.")
+    } else {
+      alert("Campos inválidos ou matrícula existente/inválido.")
+    }
   }
 }

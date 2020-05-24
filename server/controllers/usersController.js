@@ -75,11 +75,6 @@ userController.updateUserCar = function (req, res, next) {
         type: req.body.type
     };
 
-    var queryUserPlate = `
-        SELECT plate
-        FROM parkdriver
-        WHERE number = $1`;
-
     var queryVehicle = `
         INSERT INTO vehicles (plate, car_brand, car_model, type, access_park)
         VALUES ($1, $2, $3, $4, TRUE)`;
@@ -87,11 +82,6 @@ userController.updateUserCar = function (req, res, next) {
     var queryUpdateUserPlate = `
         INSERT INTO parkdriver (number, plate)
         VALUES ($1, $2)`;
-
-    var queryPlateParkAccess = `
-        UPDATE vehicles
-        SET access_park = FALSE
-        WHERE plate = $1 AND access_park = TRUE`;
 
     db.query('BEGIN', function (err, result) {
         db.query(queryVehicle, [car.plate, car.car_brand, car.car_model, car.type], function (err, resVehicleQuery) {
@@ -102,42 +92,22 @@ userController.updateUserCar = function (req, res, next) {
                     error: "Matrícula já existente."
                 });
             } else {
-                db.query(queryUserPlate, [userNumber], function (err, resUserQuery) {
+                db.query(queryUpdateUserPlate, [userNumber, car.plate], function (err, resUpdateUser) {
                     if (err) {
                         rollback(db);
 
                         res.json({
-                            error: "Número já existente."
+                            error: "Ocorreu um erro."
                         });
                     } else {
-                        db.query(queryPlateParkAccess, [resUserQuery.rows[0]['plate']], function (err, resPlateQuery) {
-                            if (err) {
-                                rollback(db);
+                        db.query('COMMIT');
 
-                                res.json({
-                                    error: "Erro"
-                                });
-                            } else {
-                                db.query(queryUpdateUserPlate, [userNumber, car.plate], function (err, resUpdateUser) {
-                                    if (err) {
-                                        rollback(db);
-
-                                        res.json({
-                                            error: "Ocorreu um erro."
-                                        });
-                                    } else {
-                                        db.query('COMMIT');
-
-                                        res.json({
-                                            number: userNumber,
-                                            plate: car.plate,
-                                            car_brand: car.car_brand,
-                                            car_model: car.car_model,
-                                            type: car.type
-                                        });
-                                    }
-                                });
-                            }
+                        res.json({
+                            number: userNumber,
+                            plate: car.plate,
+                            car_brand: car.car_brand,
+                            car_model: car.car_model,
+                            type: car.type
                         });
                     }
                 });
