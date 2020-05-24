@@ -1,5 +1,5 @@
 <div>
-    <div class="tableDiv">
+    <div *ngIf="user.length > 0; else noUsers" class="tableDiv">
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
@@ -9,11 +9,11 @@
                     <th scope="col">Carro</th>
                     <th scope="col">Data entrada</th>
                     <th scope="col">Data saída</th>
-                    <th scope="col">Tipo de veículo</th>    
+                    <th scope="col">Tipo de veículo</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let user of user">
+                <tr *ngFor="let user of userDetails">
                     <th scope="row">{{ user.number }}</th>
                     <td>{{ user.firstname }} {{ user.lastname }}</td>
                     <td>{{ user.plate }}</td>
@@ -24,7 +24,28 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-between p-2">
+            <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+                aria-label="Default pagination"></ngb-pagination>
+
+            <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+                <option [ngValue]="3">3 registos por página</option>
+                <option [ngValue]="5">5 registos por página</option>
+                <option [ngValue]="10">10 registos por página</option>
+            </select>
+        </div>
     </div>
+    
+    <div>
+        <ng-template #noUsers>
+            <div class="noUsersDiv">
+                <h1>Não existem acessos deste utilizadores ao parque.</h1>
+            </div>
+        </ng-template>
+    </div>
+
 </div>
 <app-sidebar></app-sidebar>
 <app-navbar></app-navbar>
+<app-footer></app-footer>

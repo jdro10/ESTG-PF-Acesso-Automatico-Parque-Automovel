@@ -34,11 +34,11 @@ router.get('/userEntries/:number', function(req, res, next) {
   user.showUserParkEntries(req, res);
 });
 
-router.put('/disableAccess/:number', function(req, res, next) {
+router.put('/disableAccess/:plate', function(req, res, next) {
   user.disableUserParkAccess(req, res);
 });
 
-router.put('/enableAccess/:number', function(req, res, next){
+router.put('/enableAccess/:plate', function(req, res, next){
   user.enableUserParkAccess(req, res);
 });
 

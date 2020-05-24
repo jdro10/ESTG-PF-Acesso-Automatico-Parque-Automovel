@@ -238,16 +238,16 @@ userController.showParkAccessByDate = function (req, res, next) {
     });
 };
 
-userController.showOpenParkAccessByDate = function(req, res, next){
+userController.showOpenParkAccessByDate = function (req, res, next) {
     var date = req.params.date + " 00:00:00";
 
     var query = `
     SELECT *
     FROM parkaccess
     WHERE plate NOT IN (SELECT plate FROM parkdriver) AND date_in BETWEEN $1 AND $1 + interval '1 day'`;
-    
-    db.query(query, [date], function(err, resOpenParkAccess) {
-        if(err){
+
+    db.query(query, [date], function (err, resOpenParkAccess) {
+        if (err) {
             console.log(err);
             res.json({
                 error: "Ocorreu um erro."
@@ -261,39 +261,27 @@ userController.showOpenParkAccessByDate = function(req, res, next){
 };
 
 userController.disableUserParkAccess = function (req, res, next) {
-    var userNumber = req.params.number;
-
-    var queryUser = `
-        SELECT pd.plate
-        FROM parkdriver pd, vehicles v
-        WHERE pd.number = $1 AND pd.plate = v.plate AND c.access_park = TRUE`;
+    var plate = req.params.plate;
 
     var queryVehicle = `
         UPDATE vehicles
         SET access_park = FALSE
         WHERE plate = $1`;
 
-    db.query(queryUser, [userNumber], function (err, resUserQuery) {
+
+    db.query(queryVehicle, [plate], function (err, resVehicleQuery) {
         if (err) {
             res.json({
                 error: "Ocorreu um erro."
             });
-        } else if (resUserQuery.rowCount > 0) {
-            db.query(queryVehicle, [resUser.rows[0]['plate']], function (err, resVehicleQuery) {
-                if (err) {
-                    res.json({
-                        error: "Ocorreu um erro."
-                    });
-                } else {
-                    res.json({
-                        userNumber: userNumber,
-                        parkAccess: false
-                    });
-                }
+        } else if (resVehicleQuery.rowCount > 0) {
+            res.json({
+                plate: plate,
+                parkAccess: true
             });
         } else {
             res.json({
-                error: "Número inválido"
+                msg: "Matrícula inválida"
             });
         }
     });

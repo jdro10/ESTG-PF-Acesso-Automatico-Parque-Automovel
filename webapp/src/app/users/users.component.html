@@ -1,5 +1,5 @@
 <div>
-  <div class="tableDiv">
+  <div class="tableDiv" *ngIf="users.length > 0; else noUsers">
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
@@ -9,20 +9,54 @@
           <th scope="col">Carro</th>
           <th scope="col">Tipo de veículo</th>
           <th scope="col">Acesso</th>
+          <th scope="col">Ativar/desativar acesso</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users">
-          <th scope="row"><a  [routerLink]="['/userDetails', user.number]">{{ user.number }}</a></th>
+        <tr *ngFor="let user of allUsers">
+          <th scope="row"><a [routerLink]="['/userDetails', user.number]">{{ user.number }}</a></th>
           <td>{{ user.firstname }} {{ user.lastname}}</td>
           <td>{{ user.plate }}</td>
           <td>{{ user.car_brand }} {{ user.car_model }}</td>
           <td>{{ user.type }}</td>
           <td>{{ user.access_park }}</td>
+          <div *ngIf="user.access_park == true; else disabled" class="disableButton">
+            <button type="button" class="btn btn-danger" (click)="disableAccess(user.plate)">Desativar</button>
+          </div>
+          <div>
+            <ng-template #disabled>
+              <div class="enableButton">
+                <button type="button" class="btn btn-success" (click)="enableAccess(user.plate)">Ativar</button>
+              </div>
+            </ng-template>
+          </div>
         </tr>
       </tbody>
     </table>
+
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+        aria-label="Default pagination"></ngb-pagination>
+
+      <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+        <option [ngValue]="3">3 registos por página</option>
+        <option [ngValue]="5">5 registos por página</option>
+        <option [ngValue]="10">10 registos por página</option>
+      </select>
+    </div>
+
   </div>
+
+  <div>
+    <ng-template #noUsers>
+      <div class="noUsersDiv">
+        <h1>Não existem utilizadores registados.</h1>
+      </div>
+    </ng-template>
+  </div>
+
 </div>
+
 <app-sidebar></app-sidebar>
 <app-navbar></app-navbar>
+<app-footer></app-footer>

@@ -9,6 +9,9 @@ import { UserService } from '../services/user.service';
 })
 export class UsersComponent implements OnInit {
   users: User[];
+  page = 1;
+  pageSize = 10;
+  collectionSize: number;
 
   constructor(private userService: UserService) { }
 
@@ -16,6 +19,26 @@ export class UsersComponent implements OnInit {
     this.userService.getUsers().subscribe(users => {
       this.users = users;
     });
-    console.log(this.users.toString())
+  }
+
+  get allUsers(): User[] {
+    this.collectionSize = this.users.length;
+
+    return this.users
+      .map((user, i) => ({id: i + 1, ...user}))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  }
+
+  disableAccess(plate: string): void {
+    this.userService.disableAccess(plate).subscribe(() =>
+    this.userService.getUsers().subscribe(users => {
+      this.users = users; }));
+  }
+
+  enableAccess(plate: string): void {
+    this.userService.enableAccess(plate).subscribe(() =>
+    this.userService.getUsers().subscribe(users => {
+      this.users = users; })
+    );
   }
 }

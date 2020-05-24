@@ -39,7 +39,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of parkAccessAll">
-        <th scope="row">{{ user.number }}</th>
+        <th scope="row"><a [routerLink]="['/userDetails', user.number]">{{ user.number }}</a></th>
         <td>{{ user.firstname }} {{ user.lastname}}</td>
         <td>{{ user.plate }}</td>
         <td>{{ user.car_brand }} {{ user.car_model }}</td>
@@ -63,11 +63,10 @@
   </div>
   <ng-template #noAccess>
     <div class="noAccessDiv">
-      <h1>Não existem acessos ao parque neste dia</h1>
+      <h1>Não existem acessos ao parque neste dia.</h1>
     </div>
   </ng-template>
 
 </div>
 
 <app-parkmode></app-parkmode>
-

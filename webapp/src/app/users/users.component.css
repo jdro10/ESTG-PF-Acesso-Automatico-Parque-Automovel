@@ -4,3 +4,21 @@
     width: 50%;
     left: 25%;
 }
+
+.noUsersDiv {
+    position: absolute;
+    top: 20%;
+    left: 35%;
+}
+
+.enableButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.disableButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
