@@ -28,6 +28,17 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     this.user = this.signUpForm.value;
-    this.userService.createUser(this.user).subscribe();
+    this.userService.createUser(this.user).subscribe(user => {
+      this.user = user,
+      this.alert()
+    });
+  }
+
+  alert(){
+    if(this.user.number){
+      alert("Utilizador registado com sucesso.")
+    } else {
+      alert("Campos inválidos/Número de utilizador ou matrícula existente/inválido.")
+    }
   }
 }

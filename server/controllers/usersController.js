@@ -29,38 +29,39 @@ userController.create = function (req, res, next) {
         INSERT INTO parkDriver (number, plate) 
         VALUES ($1, $2)`;
 
-    db.query(queryUser, [user.number, user.firstName, user.lastName], function (err, resUserQuery) {
-        if (err) {
-            rollback(db);
+    db.query('BEGIN', function (err, result) {
+        db.query(queryUser, [user.number, user.firstName, user.lastName], function (err, resUserQuery) {
+            if (err) {
+                rollback(db);
 
-            res.json({
-                error: "Número de utilizador já existente."
-            });
-        } else {
-            db.query(queryVehicle, [user.plate, user.car_brand, user.car_model, user.type], function (err, resVehicleQuery) {
-                if (err) {
-                    rollback(db);
+                res.json({
+                    error: "Número de utilizador já existente."
+                });
+            } else {
+                db.query(queryVehicle, [user.plate, user.car_brand, user.car_model, user.type], function (err, resVehicleQuery) {
+                    if (err) {
+                        rollback(db);
 
-                    res.json({
-                        error: "Matrícula já existente."
-                    });
-                } else {
-                    db.query(queryParkDriver, [user.number, user.plate], function (err, resDriverQuery) {
-                        if (err) {
-                            rollback(db);
+                        res.json({
+                            error: "Matrícula já existente."
+                        });
+                    } else {
+                        db.query(queryParkDriver, [user.number, user.plate], function (err, resDriverQuery) {
+                            if (err) {
+                                rollback(db);
 
-                            res.json({
-                                error: "Ocorreu um erro."
-                            });
-                        } else {
-                            res.json({
-                                user: user
-                            });
-                        }
-                    });
-                }
-            });
-        }
+                                res.json({
+                                    error: "Ocorreu um erro."
+                                });
+                            } else {
+                                db.query('COMMIT');
+                                res.json(user);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     });
 };
 
@@ -92,52 +93,56 @@ userController.updateUserCar = function (req, res, next) {
         SET access_park = FALSE
         WHERE plate = $1 AND access_park = TRUE`;
 
-    db.query(queryVehicle, [car.plate, car.car_brand, car.car_model, car.type], function (err, resVehicleQuery) {
-        if (err) {
-            rollback(db);
+    db.query('BEGIN', function (err, result) {
+        db.query(queryVehicle, [car.plate, car.car_brand, car.car_model, car.type], function (err, resVehicleQuery) {
+            if (err) {
+                rollback(db);
 
-            res.json({
-                error: "Matrícula já existente."
-            });
-        } else {
-            db.query(queryUserPlate, [userNumber], function (err, resUserQuery) {
-                if (err) {
-                    rollback(db);
+                res.json({
+                    error: "Matrícula já existente."
+                });
+            } else {
+                db.query(queryUserPlate, [userNumber], function (err, resUserQuery) {
+                    if (err) {
+                        rollback(db);
 
-                    res.json({
-                        error: "Número já existente."
-                    });
-                } else {
-                    db.query(queryPlateParkAcess, [resUserQuery.rows[0]['plate']], function (err, resPlateQuery) {
-                        if (err) {
-                            rollback(db);
+                        res.json({
+                            error: "Número já existente."
+                        });
+                    } else {
+                        db.query(queryPlateParkAcess, [resUserQuery.rows[0]['plate']], function (err, resPlateQuery) {
+                            if (err) {
+                                rollback(db);
 
-                            res.json({
-                                error: "Erro"
-                            });
-                        } else {
-                            db.query(queryUpdateUserPlate, [userNumber, car.plate], function (err, resUpdateUser) {
-                                if (err) {
-                                    rollback(db);
+                                res.json({
+                                    error: "Erro"
+                                });
+                            } else {
+                                db.query(queryUpdateUserPlate, [userNumber, car.plate], function (err, resUpdateUser) {
+                                    if (err) {
+                                        rollback(db);
 
-                                    res.json({
-                                        error: "Ocorreu um erro."
-                                    });
-                                } else {
-                                    res.json({
-                                        number: userNumber,
-                                        plate: car.plate,
-                                        car_brand: car.car_brand,
-                                        car_model: car.car_model,
-                                        type: car.type
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
+                                        res.json({
+                                            error: "Ocorreu um erro."
+                                        });
+                                    } else {
+                                        db.query('COMMIT');
+
+                                        res.json({
+                                            number: userNumber,
+                                            plate: car.plate,
+                                            car_brand: car.car_brand,
+                                            car_model: car.car_model,
+                                            type: car.type
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
     });
 };
 
@@ -267,7 +272,6 @@ userController.disableUserParkAccess = function (req, res, next) {
         UPDATE vehicles
         SET access_park = FALSE
         WHERE plate = $1`;
-
 
     db.query(queryVehicle, [plate], function (err, resVehicleQuery) {
         if (err) {
