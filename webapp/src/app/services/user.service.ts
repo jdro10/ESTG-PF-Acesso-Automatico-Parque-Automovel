@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/User';
 import { Observable } from 'rxjs';
+import { UserUpdate } from '../models/UserUpdate';
 
 const httpOptions = {
   headers: new HttpHeaders ({
@@ -18,11 +19,16 @@ export class UserService {
   getUserDetailsUrl: string = "http://localhost:3000/users/userEntries/";
   disablePlateAccessUrl: string = "http://localhost:3000/users/disableAccess/";
   enablePlateAccessUrl: string = "http://localhost:3000/users/enableAccess/";
+  updateUserUrl: string = "http://localhost:3000/users/updateUser";
 
   constructor(private http: HttpClient) { }
 
   createUser(user: User): Observable<User> {
     return this.http.post<User>(this.addUserUrl, user, httpOptions);
+  }
+
+  updateUser(userUpdate: UserUpdate): Observable<UserUpdate> {
+    return this.http.put<UserUpdate>(this.updateUserUrl, userUpdate, httpOptions);
   }
 
   getUsers(): Observable<User[]> {
