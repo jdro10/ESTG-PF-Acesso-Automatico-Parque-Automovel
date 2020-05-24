@@ -53,9 +53,7 @@ userController.create = function (req, res, next) {
                                 error: "Ocorreu um erro."
                             });
                         } else {
-                            res.json({
-                                user: user
-                            });
+                            res.json(user);
                         }
                     });
                 }
