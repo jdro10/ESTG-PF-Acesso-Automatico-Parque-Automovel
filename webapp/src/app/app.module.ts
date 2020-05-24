@@ -15,6 +15,7 @@ import { UsersComponent } from './users/users.component';
 import { UserdetailsComponent } from './userdetails/userdetails.component';
 import { ParkmodeComponent } from './parkmode/parkmode.component';
 import { FooterComponent } from './footer/footer.component';
+import { UserupdateComponent } from './userupdate/userupdate.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FooterComponent } from './footer/footer.component';
     UserdetailsComponent,
     ParkmodeComponent,
     FooterComponent,
+    UserupdateComponent,
   ],
   imports: [
     BrowserModule,

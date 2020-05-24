@@ -39,7 +39,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of parkAccessAll">
-        <th scope="row">{{ user.number }}</th>
+        <th scope="row"><a [routerLink]="['/userDetails', user.number]">{{ user.number }}</a></th>
         <td>{{ user.firstname }} {{ user.lastname}}</td>
         <td>{{ user.plate }}</td>
         <td>{{ user.car_brand }} {{ user.car_model }}</td>

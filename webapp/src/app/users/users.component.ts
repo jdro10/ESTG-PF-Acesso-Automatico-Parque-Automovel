@@ -28,4 +28,17 @@ export class UsersComponent implements OnInit {
       .map((user, i) => ({id: i + 1, ...user}))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
+
+  disableAccess(plate: string): void {
+    this.userService.disableAccess(plate).subscribe(() =>
+    this.userService.getUsers().subscribe(users => {
+      this.users = users; }));
+  }
+
+  enableAccess(plate: string): void {
+    this.userService.enableAccess(plate).subscribe(() =>
+    this.userService.getUsers().subscribe(users => {
+      this.users = users; })
+    );
+  }
 }

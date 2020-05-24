@@ -9,6 +9,7 @@
           <th scope="col">Carro</th>
           <th scope="col">Tipo de veículo</th>
           <th scope="col">Acesso</th>
+          <th scope="col">Ativar/desativar acesso</th>
         </tr>
       </thead>
       <tbody>
@@ -19,6 +20,16 @@
           <td>{{ user.car_brand }} {{ user.car_model }}</td>
           <td>{{ user.type }}</td>
           <td>{{ user.access_park }}</td>
+          <div *ngIf="user.access_park == true; else disabled" class="disableButton">
+            <button type="button" class="btn btn-danger" (click)="disableAccess(user.plate)">Desativar</button>
+          </div>
+          <div>
+            <ng-template #disabled>
+              <div class="enableButton">
+                <button type="button" class="btn btn-success" (click)="enableAccess(user.plate)">Ativar</button>
+              </div>
+            </ng-template>
+          </div>
         </tr>
       </tbody>
     </table>
