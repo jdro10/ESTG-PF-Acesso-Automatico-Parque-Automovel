@@ -1,3 +1,37 @@
-<div>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Atualizar carro do utilizador: {{ userNumber }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label>Matrícula:</label>
+                <div class="input-group">
+                    <input class="form-control" placeholder="XX00XX" formControlName="plate">
+                </div>
+                <label>Marca:</label>
+                <div class="input-group">
+                    <input class="form-control" placeholder="Renault" formControlName="car_brand">
+                </div>
+                <label>Modelo:</label>
+                <div class="input-group">
+                    <input class="form-control" placeholder="Clio" formControlName="car_model">
+                </div>
+                <label>Tipo:</label>
+                <div class="input-group">
+                    <input class="form-control" placeholder="Tipo de veículo">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" (click)="onSubmit(); modal.close('Save click')">Atualizar</button>
+    </div>
+</ng-template>
 
+<div class="updateDiv">
+    <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Adicionar novo carro</button>
 </div>
