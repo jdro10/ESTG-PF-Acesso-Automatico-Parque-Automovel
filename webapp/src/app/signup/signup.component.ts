@@ -38,7 +38,7 @@ export class SignupComponent implements OnInit {
     if(this.user.number){
       alert("Utilizador registado com sucesso.")
     } else {
-      alert("Número de utilizador ou matrícula já existente.")
+      alert("Campos inválidos/Número de utilizador ou matrícula existente/inválido.")
     }
   }
 }
