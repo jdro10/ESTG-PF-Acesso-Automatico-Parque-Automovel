@@ -55,6 +55,7 @@ class PlateDetection:
 
             if not found or not self.last_plate == self.plate_list[0]:       
                 self.recognized_plates.append(self.plate_list[0])
+                self.current_time = datetime.datetime.now()
                 self.final_json()
 
 
