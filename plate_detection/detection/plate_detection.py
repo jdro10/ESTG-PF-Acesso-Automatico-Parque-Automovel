@@ -4,14 +4,16 @@ import json
 import pika
 import datetime
 import numpy as np
+import time
 from openalpr import Alpr
 from threading import Thread
+import threading
 
 
 class PlateDetection:
 
     def __init__(self):
-        self.alpr = Alpr('eu', '/etc/openalpr/openalpr.conf', '/usr/share/openalpr/runtime_data')
+        
         self.old_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[0-9]{2}$|[0-9]{2}[A-Z]{2}[0-9]{2}$|[0-9]{2}[0-9]{2}[A-Z]{2}$')
         self.new_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[A-Z]{2}$')
         self.plate_list = []
@@ -22,13 +24,14 @@ class PlateDetection:
 
 
     def read_plate(self, frame):
-        if not self.alpr.is_loaded():
+        alpr = Alpr('eu', '/etc/openalpr/openalpr.conf', '/usr/share/openalpr/runtime_data')
+        if not alpr.is_loaded():
             print('Error loading openalpr')
             sys.exit(1)
         
-        self.alpr.set_top_n(1)
+        alpr.set_top_n(1)
 
-        results = self.alpr.recognize_ndarray(frame)
+        results = alpr.recognize_ndarray(frame)
 
         if results['results'] != []:
             Thread(target=self.get_plate_as_text, args=(results,)).start()

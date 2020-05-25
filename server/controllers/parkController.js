@@ -41,6 +41,7 @@ parkController.parkEntry = function (plateInfo) {
             if (err) {
                 console.log(err);
             } else {
+                plates.accessResponse("entry_queue_p", "allowed");
                 console.log("Entrada no parque confirmada:", plateJSON['plate']);
             }
         });
