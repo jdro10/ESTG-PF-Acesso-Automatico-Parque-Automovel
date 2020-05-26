@@ -37,7 +37,9 @@ class EntryPlateDetection(PlateDetection):
                 
                 cv2.imshow('Webcam', frame)
 
-                super().read_plate(frame)
+                Thread(target=super().read_plate, args=(frame,)).start()
+                
+                #super().read_plate(frame)
 
                 if cv2.waitKey(1) == 27:
                     exit(0)
