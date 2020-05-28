@@ -1,6 +1,9 @@
-import pygame
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 import pika
 import time
+import pygame
 from threading import Thread
 
 class ParkAccess:
@@ -8,16 +11,17 @@ class ParkAccess:
     def __init__(self, queue_name):
         pygame.init()
         pygame.display.set_caption('Parking lot')
+        self.msg = None
         self.red = (255, 0, 0)
         self.green = (0,128,0)
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
+        self.running = True
         self.display_width = 250
         self.display_height = 125
         self.display = pygame.display.set_mode((self.display_width, self.display_height))
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.channel = self.connection.channel()
-        self.msg = None
         self.queue_name = queue_name
 
     
@@ -38,13 +42,12 @@ class ParkAccess:
     def loop(self):
         thread = Thread(target=self.consume)
         thread.start()
-        running = True
 
-        while running:
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    thread.join()
-                    running = False
+                    self.running = False
+                    pygame.quit()
 
             self.display.fill(self.black)
             self.circle(75, int(self.display_height/2), self.white)
@@ -61,3 +64,6 @@ class ParkAccess:
                 self.msg = None
 
             pygame.time.Clock().tick(15)
+
+        if self.running == False:
+            pygame.quit()

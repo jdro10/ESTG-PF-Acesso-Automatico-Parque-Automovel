@@ -1,4 +1,5 @@
 import re
+import sys
 import cv2
 import json
 import pika
@@ -56,7 +57,7 @@ class PlateDetection:
 
                 if cv2.waitKey(1) == 27:
                     self.stream = False
-                    cv2.destroyAllWindows()
+                    cv2.destroyAllWindows()      
 
     
     def plate_detection(self, frame):
@@ -70,7 +71,7 @@ class PlateDetection:
         results = alpr.recognize_ndarray(frame)
 
         if results['results'] != []:
-            Thread(target=self.plate_as_text, args=(results, )).start()
+            self.plate_as_text(results)
 
     
     def plate_as_text(self, results):
@@ -123,3 +124,10 @@ class PlateDetection:
     
     def equal_elements(self, items):
         return all(plate == items[0] for plate in items)
+
+    
+    def end_program(self):
+        cv2.destroyAllWindows()
+        cv2.waitKey(1)
+        self.socket.close()
+        self.stream = False
