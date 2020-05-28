@@ -77,4 +77,21 @@ dbController.createParkDriverTable = function (req, res) {
     });
 };
 
+dbController.createWebsiteUserTable = function(req, res) {
+    const query = `
+        CREATE TABLE usersWeb (
+            username VARCHAR,
+            passwordHash VARCHAR,
+            PRIMARY KEY (username)
+        );`
+    
+    db.query(query, function(err, res) {
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Website users table created successfully");
+        }
+    });
+};
+
 module.exports = dbController;
