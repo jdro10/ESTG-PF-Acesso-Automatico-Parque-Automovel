@@ -302,4 +302,25 @@ userController.enableUserParkAccess = function (req, res, next) {
     });
 };
 
+userController.searchByPlate = function(req, res, next) {
+    var plate = req.params.plate;
+
+    var query = `
+        SELECT *
+        FROM users u, parkdriver pd
+        WHERE pd.plate = $1 AND pd.number = u.number`;
+        
+    db.query(query, [plate], function(err, resSearchByPlate) {
+        if(err){
+            res.json({
+                error: "Ocorreu um erro"
+            });
+        } else {
+            res.json(
+                resSearchByPlate.rows[0].number
+            );
+        }
+    });
+};
+
 module.exports = userController;
