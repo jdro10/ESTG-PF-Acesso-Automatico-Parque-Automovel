@@ -20,6 +20,7 @@ export class UserService {
   disablePlateAccessUrl: string = "http://localhost:3000/users/disableAccess/";
   enablePlateAccessUrl: string = "http://localhost:3000/users/enableAccess/";
   updateUserUrl: string = "http://localhost:3000/users/updateUser";
+  searchByPlateUrl: string = "http://localhost:3000/users/searchByPlate/";
 
   constructor(private http: HttpClient) { }
 
@@ -45,5 +46,9 @@ export class UserService {
 
   enableAccess(plate: string): Observable<any> {
     return this.http.put<any>(this.enablePlateAccessUrl + plate, null);
+  }
+
+  searchByPlate(plate: string): Observable<any> {
+    return this.http.get<any>(this.searchByPlateUrl + plate);
   }
 }

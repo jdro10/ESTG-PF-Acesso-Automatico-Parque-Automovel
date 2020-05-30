@@ -42,4 +42,8 @@ router.put('/enableAccess/:plate', function(req, res, next){
   user.enableUserParkAccess(req, res);
 });
 
+router.get('/searchByPlate/:plate', function(req, res, next) {
+  user.searchByPlate(req, res);
+});
+
 module.exports = router;
