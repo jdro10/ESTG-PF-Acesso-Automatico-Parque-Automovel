@@ -183,6 +183,16 @@ userController.showUserParkEntries = function (req, res, next) {
                 error: "Ocorreu um erro."
             });
         } else {
+            for (var i = 0; i < resUserEntries.rows.length; i++) {
+                resUserEntries.rows[i].date_in = new Date(resUserEntries.rows[i].date_in).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" });
+            }
+
+            for (var i = 0; i < resUserEntries.rows.length; i++) {
+                if (resUserEntries.rows[i].date_out != null) {
+                    resUserEntries.rows[i].date_out = new Date(resUserEntries.rows[i].date_out).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" });
+                }
+            }
+            
             res.json(resUserEntries.rows);
         }
     });
@@ -194,15 +204,13 @@ userController.showParkAccess = function (req, res, next) {
         FROM users u, parkdriver pd, parkaccess pa, vehicles v
         WHERE pd.number = u.number AND pa.plate = pd.plate AND v.plate = pd.plate`;
 
-    db.query(query, function (err, resParkAcess) {
+    db.query(query, function (err, resParkAccess) {
         if (err) {
             res.json({
                 error: "Ocorreu um erro."
             });
         } else {
-            res.json(
-                resParkAcess.rows
-            );
+            res.json(resParkAccess.rows);
         }
     });
 };
@@ -221,6 +229,16 @@ userController.showParkAccessByDate = function (req, res, next) {
                 error: "Ocorreu um erro."
             });
         } else {
+            for (var i = 0; i < resParkAccessDate.rows.length; i++) {
+                resParkAccessDate.rows[i].date_in = new Date(resParkAccessDate.rows[i].date_in).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" });
+            }
+
+            for (var i = 0; i < resParkAccessDate.rows.length; i++) {
+                if (resParkAccessDate.rows[i].date_out != null) {
+                    resParkAccessDate.rows[i].date_out = new Date(resParkAccessDate.rows[i].date_out).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" });
+                }
+            }
+
             res.json(
                 resParkAccessDate.rows
             );
@@ -243,6 +261,16 @@ userController.showOpenParkAccessByDate = function (req, res, next) {
                 error: "Ocorreu um erro."
             });
         } else {
+            for (var i = 0; i < resOpenParkAccess.rows.length; i++) {
+                resOpenParkAccess.rows[i].date_in = new Date(resOpenParkAccess.rows[i].date_in).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" });
+            }
+
+            for (var i = 0; i < resOpenParkAccess.rows.length; i++) {
+                if (resOpenParkAccess.rows[i].date_out != null) {
+                    resOpenParkAccess.rows[i].date_out = new Date(resOpenParkAccess.rows[i].date_out).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" });
+                }
+            }
+
             res.json(
                 resOpenParkAccess.rows
             );
@@ -302,16 +330,16 @@ userController.enableUserParkAccess = function (req, res, next) {
     });
 };
 
-userController.searchByPlate = function(req, res, next) {
+userController.searchByPlate = function (req, res, next) {
     var plate = req.params.plate;
 
     var query = `
         SELECT *
         FROM users u, parkdriver pd
         WHERE pd.plate = $1 AND pd.number = u.number`;
-        
-    db.query(query, [plate], function(err, resSearchByPlate) {
-        if(err){
+
+    db.query(query, [plate], function (err, resSearchByPlate) {
+        if (err) {
             res.json({
                 error: "Ocorreu um erro"
             });
