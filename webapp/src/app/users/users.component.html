@@ -19,7 +19,16 @@
           <td>{{ user.plate }}</td>
           <td>{{ user.car_brand }} {{ user.car_model }}</td>
           <td>{{ user.type }}</td>
-          <td>{{ user.access_park }}</td>
+          <td>
+            <div *ngIf="user.access_park == true; else no">
+              Sim
+            </div>
+            <div>
+              <ng-template #no>
+                Não
+              </ng-template>
+            </div>
+          </td>
           <div *ngIf="user.access_park == true; else disabled" class="disableButton">
             <button type="button" class="btn btn-danger" (click)="disableAccess(user.plate)">Desativar</button>
           </div>
