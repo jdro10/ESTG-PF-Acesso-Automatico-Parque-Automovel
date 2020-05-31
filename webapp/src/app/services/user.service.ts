@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/User';
 import { Observable } from 'rxjs';
 import { UserUpdate } from '../models/UserUpdate';
+import { UserLogin } from '../models/UserLogin';
 
 const httpOptions = {
   headers: new HttpHeaders ({
@@ -21,6 +22,7 @@ export class UserService {
   enablePlateAccessUrl: string = "http://localhost:3000/users/enableAccess/";
   updateUserUrl: string = "http://localhost:3000/users/updateUser";
   searchByPlateUrl: string = "http://localhost:3000/users/searchByPlate/";
+  loginUrl: string = "http://localhost:3000/auth/login";
 
   constructor(private http: HttpClient) { }
 
@@ -50,5 +52,9 @@ export class UserService {
 
   searchByPlate(plate: string): Observable<any> {
     return this.http.get<any>(this.searchByPlateUrl + plate);
+  }
+
+  login(user: UserLogin): Observable<UserLogin> {
+    return this.http.post<UserLogin>(this.loginUrl, user, httpOptions);
   }
 }

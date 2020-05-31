@@ -6,8 +6,4 @@ router.post('/create', function(req, res, next) {
     webUser.create(req, res);
 });
 
-router.get('/login', function(req, res, next) {
-    webUser.login(req, res);
-});
-
 module.exports = router;

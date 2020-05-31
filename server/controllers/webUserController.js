@@ -28,37 +28,4 @@ webUserController.create = function (req, res) {
     });
 };
 
-webUserController.login = function(req, res) {
-    var user = {
-        username: req.body.username,
-        password: req.body.password
-    };
-
-    var queryUserHash = `
-        SELECT passwordhash
-        FROM usersweb
-        WHERE username = $1`;
-    
-    db.query(queryUserHash, [user.username], function(err, resPasswordHash) {
-        if(err){
-            console.log(err);
-            res.json({
-                error: "Ocorreu um erro."
-            });
-        } else if(resPasswordHash.rowCount > 0) {
-            bcrypt.compare(user.password, resPasswordHash.rows[0].passwordhash, function(err, resHash) {
-                if(resHash){
-                    res.json({
-                        login: true
-                    });
-                } else {
-                    res.json({
-                        login: false
-                    });
-                }
-              });
-        }
-    });    
-};
-
 module.exports = webUserController;

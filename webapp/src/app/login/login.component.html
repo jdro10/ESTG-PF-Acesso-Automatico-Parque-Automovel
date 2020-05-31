@@ -1,17 +1,17 @@
 <div class="loginForm">
     <div class="formClass">
-        <form>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <label id="username"><b>Username</b></label>
             <br>
-            <input>
+            <input formControlName="username">
             <br>
             <br>
             <label id="password"><b>Password</b></label>
             <br>
-            <input type="password">
+            <input type="password" formControlName="password">
             <br>
             <br>
-            <button type="submit" class="btn btn-primary" id="loginButton">Login</button>
+            <button type="submit" class="btn btn-primary" id="loginButton" (click)="onSubmit()">Login</button>
         </form>
     </div>
 </div>

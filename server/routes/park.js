@@ -2,7 +2,15 @@ var express = require('express');
 var router = express.Router();
 var park = require('../controllers/parkController');
 
-router.get('/getParkMode', function(req, res, next){
+var authenticated = function(req, res, next){
+    if(req.isAuthenticated()){
+      return next();
+    }else{
+      console.log("not auth");
+    }
+}
+
+router.get('/getParkMode', authenticated, function(req, res, next){
     park.getParkMode(req, res);
 });
 
