@@ -8,7 +8,8 @@ import { UserdetailsComponent } from './userdetails/userdetails.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  { path: '', component: HomepageComponent },
+  { path: '', component: LoginComponent},
+  { path: 'home', component: HomepageComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'users', component: UsersComponent },
   { path: 'userDetails/:numero', component: UserdetailsComponent},

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../models/User';
 import { Observable } from 'rxjs';
+
+import { environment } from './../../environments/environment';
+import { User } from '../models/User';
 import { UserUpdate } from '../models/UserUpdate';
-import { UserLogin } from '../models/UserLogin';
 
 const httpOptions = {
   headers: new HttpHeaders ({
@@ -14,47 +15,37 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
+
 export class UserService {
-  addUserUrl: string = "http://localhost:3000/users/createUser";
-  getUsersUrl: string = "http://localhost:3000/users";
-  getUserDetailsUrl: string = "http://localhost:3000/users/userEntries/";
-  disablePlateAccessUrl: string = "http://localhost:3000/users/disableAccess/";
-  enablePlateAccessUrl: string = "http://localhost:3000/users/enableAccess/";
-  updateUserUrl: string = "http://localhost:3000/users/updateUser";
-  searchByPlateUrl: string = "http://localhost:3000/users/searchByPlate/";
-  loginUrl: string = "http://localhost:3000/auth/login";
+  api_url = environment.api_url;
 
   constructor(private http: HttpClient) { }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>(this.addUserUrl, user, httpOptions);
+    return this.http.post<User>(this.api_url + "/users/createUser", user, { withCredentials: true, headers: httpOptions.headers });
   }
 
   updateUser(userUpdate: UserUpdate): Observable<UserUpdate> {
-    return this.http.put<UserUpdate>(this.updateUserUrl, userUpdate, httpOptions);
+    return this.http.put<UserUpdate>(this.api_url + "/users/updateUser", userUpdate, { withCredentials: true, headers: httpOptions.headers });
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.getUsersUrl);
+    return this.http.get<User[]>(this.api_url + "/users", { withCredentials: true, headers: httpOptions.headers });
   }
 
   getUserDetails(number: string): Observable<User[]> {
-    return this.http.get<User[]>(this.getUserDetailsUrl + number);
+    return this.http.get<User[]>(this.api_url + "/users/userEntries/" + number, { withCredentials: true, headers: httpOptions.headers });
   }
 
   disableAccess(plate: string): Observable<any> {
-    return this.http.put<any>(this.disablePlateAccessUrl + plate, null);
+    return this.http.put<any>(this.api_url + "/users/disableAccess/" + plate, null, { withCredentials: true, headers: httpOptions.headers });
   }
 
   enableAccess(plate: string): Observable<any> {
-    return this.http.put<any>(this.enablePlateAccessUrl + plate, null);
+    return this.http.put<any>(this.api_url + "/users/enableAccess/" + plate, null, { withCredentials: true, headers: httpOptions.headers });
   }
 
   searchByPlate(plate: string): Observable<any> {
-    return this.http.get<any>(this.searchByPlateUrl + plate);
-  }
-
-  login(user: UserLogin): Observable<UserLogin> {
-    return this.http.post<UserLogin>(this.loginUrl, user, httpOptions);
+    return this.http.get<any>(this.api_url + "/users/searchByPlate/" + plate, { withCredentials: true, headers: httpOptions.headers });
   }
 }

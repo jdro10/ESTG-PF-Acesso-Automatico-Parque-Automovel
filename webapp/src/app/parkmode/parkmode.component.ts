@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ParkAccessService } from '../services/park-access.service';
 import { ParkMode } from '../models/ParkMode';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-parkmode',
@@ -11,12 +12,13 @@ export class ParkmodeComponent implements OnInit {
   parkMode: ParkMode;
   parkM: string;
 
-  constructor(private parkAccessService: ParkAccessService) { }
+  constructor(private parkAccessService: ParkAccessService, private router: Router) { }
 
   ngOnInit(): void {
-    this.parkAccessService.getParkMode().subscribe(parkMode => {
-      this.parkMode = parkMode;
-    });
+    this.parkAccessService.getParkMode().subscribe(parkMode => 
+      this.parkMode = parkMode,
+      error => this.router.navigate([''])
+    );
   }
 
   changeParkMode(): void {
@@ -28,9 +30,10 @@ export class ParkmodeComponent implements OnInit {
     var mode = JSON.stringify({ parkMode: this.parkM });
 
     this.parkAccessService.changeParkMode(mode).subscribe(() =>
-      this.parkAccessService.getParkMode().subscribe(parkMode => {
-        this.parkMode = parkMode;
-      })
+      this.parkAccessService.getParkMode().subscribe(parkMode =>
+        this.parkMode = parkMode,
+        error => this.router.navigate([''])
+      )
     );
   }
 }

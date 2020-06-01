@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormBuilder } from '@angular/forms';
 
 import { UserLogin } from '../models/UserLogin';
-import { UserService } from '../services/user.service';
+import { WebService } from '../services/web.service';
 
 @Component({
   selector: 'app-login',
@@ -12,10 +12,11 @@ import { UserService } from '../services/user.service';
 })
 export class LoginComponent implements OnInit {
   loginForm;
+  loginMsg;
   user: UserLogin;
   userLog: UserLogin;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private webService: WebService, private router: Router) {
     this.loginForm = this.formBuilder.group({
       username: new FormControl(''),
       password: new FormControl('')
@@ -28,6 +29,6 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.user = this.loginForm.value;
 
-    this.userService.login(this.user).subscribe(data => { console.log(data); this.router.navigateByUrl('/'); });
+    this.webService.login(this.user).subscribe(loginMsg => { this.loginMsg = loginMsg, this.router.navigate(['/home']), alert(this.loginMsg.message )});
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/User';
 import { UserService } from '../services/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-userdetails',
@@ -15,13 +15,14 @@ export class UserdetailsComponent implements OnInit {
   pageSize = 10;
   collectionSize: number;
 
-  constructor(private userService: UserService, private route: ActivatedRoute) { }
+  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.userNumber = this.route.snapshot.paramMap.get('numero');
-    this.userService.getUserDetails(this.userNumber).subscribe(users => {
-      this.user = users;
-    });
+    this.userService.getUserDetails(this.userNumber).subscribe(
+      users => this.user = users,
+      error => this.router.navigate([''])
+    );
   }
 
   get userDetails(): User[] {
