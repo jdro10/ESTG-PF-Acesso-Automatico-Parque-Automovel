@@ -343,7 +343,7 @@ userController.searchByPlate = function (req, res, next) {
             res.json({
                 error: "Ocorreu um erro"
             });
-        } else {
+        } else if(resSearchByPlate.rows.length > 0){
             res.json(
                 resSearchByPlate.rows[0].number
             );
