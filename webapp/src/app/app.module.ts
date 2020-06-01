@@ -17,6 +17,7 @@ import { ParkmodeComponent } from './parkmode/parkmode.component';
 import { FooterComponent } from './footer/footer.component';
 import { UserupdateComponent } from './userupdate/userupdate.component';
 import { LoginComponent } from './login/login.component';
+import { LoggeduserComponent } from './loggeduser/loggeduser.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { LoginComponent } from './login/login.component';
     FooterComponent,
     UserupdateComponent,
     LoginComponent,
+    LoggeduserComponent,
   ],
   imports: [
     BrowserModule,

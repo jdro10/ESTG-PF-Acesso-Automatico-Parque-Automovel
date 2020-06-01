@@ -14,4 +14,8 @@ router.post('/create', authenticated, function (req, res, next) {
     webUser.create(req, res);
 });
 
+router.get('/currentUsername', authenticated, function(req, res, next) {
+    res.json({ username: req.user.username });
+});
+
 module.exports = router;
