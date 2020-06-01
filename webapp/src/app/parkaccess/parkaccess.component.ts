@@ -27,7 +27,7 @@ export class ParkaccessComponent implements OnInit {
 
   ngOnInit(): void {
     this.httpRequests(this.todayDate());
-    this.lastdate = new Date(this.date.year, this.date.month, this.date.day);
+    this.lastdate = new Date(this.date.year, (this.date.month - 1), this.date.day);
   }
 
   todayDate(): string {
@@ -46,15 +46,15 @@ export class ParkaccessComponent implements OnInit {
 
     if (this.nDate.getMonth() >= 1 && this.nDate.getMonth() < 10) {
       if (this.nDate.getDate() >= 1 && this.nDate.getDate() < 10) {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-0" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-0" + this.nDate.getDate();
       } else {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-" + this.nDate.getDate();
       }
     } else {
       if (this.nDate.getDate() >= 1 && this.nDate.getDate() < 10) {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-0" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-0" + this.nDate.getDate();
       } else {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-" + this.nDate.getDate();
       }
     }
 
@@ -69,15 +69,15 @@ export class ParkaccessComponent implements OnInit {
 
     if (this.date.month >= 1 && this.date.month < 10) {
       if (this.nDate.getDate() >= 1 && this.nDate.getDate() < 10) {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-0" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-0" + this.nDate.getDate();
       } else {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-" + this.nDate.getDate();
       }
     } else {
       if (this.nDate.getDate() >= 1 && this.nDate.getDate() < 10) {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-0" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-0" + this.nDate.getDate();
       } else {
-        this.dateString = this.nDate.getFullYear() + "-0" + this.nDate.getMonth() + "-" + this.nDate.getDate();
+        this.dateString = this.nDate.getFullYear() + "-0" + (this.nDate.getMonth() + 1) + "-" + this.nDate.getDate();
       }
     }
 
