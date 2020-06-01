@@ -27,4 +27,8 @@ export class WebService {
   logout(): Observable<any> {
     return this.http.get<any>(this.api_url + "/auth/logout", { withCredentials: true, headers: httpOptions.headers });
   }
+
+  currentUser(): Observable<any> {
+    return this.http.get<any>(this.api_url + "/webUser/currentUsername", { withCredentials: true, headers: httpOptions.headers });
+  }
 }
