@@ -16,6 +16,7 @@ import { UserdetailsComponent } from './userdetails/userdetails.component';
 import { ParkmodeComponent } from './parkmode/parkmode.component';
 import { FooterComponent } from './footer/footer.component';
 import { UserupdateComponent } from './userupdate/userupdate.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { UserupdateComponent } from './userupdate/userupdate.component';
     ParkmodeComponent,
     FooterComponent,
     UserupdateComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,21 @@
+.loginForm {
+    position: absolute;
+    top: 25%;
+    width: 18%; 
+    left: 38%;
+    background-color: #F8F8F8;
+    height: 30%;
+    border: 1px solid #475d88;
+    border-radius: 25px;
+}
+
+.formClass {
+    position: absolute;
+    top: 10%;
+    left: 28%;
+}
+
+#loginButton {
+    position: absolute;
+    width: 100%;
+}

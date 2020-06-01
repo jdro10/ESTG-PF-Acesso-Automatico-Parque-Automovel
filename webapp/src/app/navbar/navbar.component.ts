@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { UserService } from '../services/user.service';
+import { WebService } from '../services/web.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +12,7 @@ import { UserService } from '../services/user.service';
 export class NavbarComponent implements OnInit {
   userNumber: string;
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private userService: UserService, private webService: WebService) { }
 
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
@@ -23,8 +25,11 @@ export class NavbarComponent implements OnInit {
 
     this.userService.searchByPlate(inputPlate).subscribe(userNumber => {
       this.userNumber = userNumber;
-      
       this.router.navigateByUrl('/userDetails/' + this.userNumber);
     });
+  }
+
+  logout(){
+    this.webService.logout().subscribe(data => this.router.navigate(['']));
   }
 }

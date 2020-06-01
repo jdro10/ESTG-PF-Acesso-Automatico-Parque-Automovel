@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable} from 'rxjs';
+
+import { environment } from './../../environments/environment';
 import { ParkAccess } from '../models/ParkAccess';
 import { ParkMode } from '../models/ParkMode';
-import { Observable} from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders ({
@@ -13,28 +15,25 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class ParkAccessService {
 
-  parkAccessUrl: string = "http://localhost:3000/users/showParkAccessByDate/";
-  openParkAccessUrl: string = "http://localhost:3000/users/showOpenParkAccessByDate/"
-  getParkModeUrl: string = "http://localhost:3000/park/getParkMode";
-  changeParkModeUrl: string = "http://localhost:3000/park/setParkMode";
+export class ParkAccessService {
+  api_url = environment.api_url;
 
   constructor(private http: HttpClient) {}
   
   getParkAccess(date: string): Observable<ParkAccess[]> {
-    return this.http.get<ParkAccess[]>(this.parkAccessUrl + date);
+    return this.http.get<ParkAccess[]>(this.api_url + "/users/showParkAccessByDate/" + date, { withCredentials: true, headers: httpOptions.headers });
   }
 
   getOpenParkAccess(date: string): Observable<ParkAccess[]> {
-    return this.http.get<ParkAccess[]>(this.openParkAccessUrl + date);
+    return this.http.get<ParkAccess[]>(this.api_url + "/users/showOpenParkAccessByDate/" + date, { withCredentials: true, headers: httpOptions.headers });
   }
 
   getParkMode(): Observable<any> {
-    return this.http.get<any>(this.getParkModeUrl);
+    return this.http.get<any>(this.api_url + "/park/getParkMode", { withCredentials: true, headers: httpOptions.headers });
   }
 
   changeParkMode(parkM: string): Observable<ParkMode> {
-    return this.http.put<ParkMode>(this.changeParkModeUrl, parkM, httpOptions);
+    return this.http.put<ParkMode>(this.api_url + "/park/setParkMode", parkM, { withCredentials: true, headers: httpOptions.headers });
   }
 }

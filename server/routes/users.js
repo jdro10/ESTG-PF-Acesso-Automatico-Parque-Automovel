@@ -2,47 +2,55 @@ var express = require('express');
 var router = express.Router();
 var user = require('../controllers/usersController');
 
-router.get('/', function(req, res, next) {
+function authenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.status(401).json({ message: "Não autorizado" });
+  }
+}
+
+router.get('/', authenticated, function (req, res, next) {
   user.showAllUsersInfo(req, res);
 });
 
-router.get('/showParkAccessByDate/:date', function(req, res, next) {
+router.get('/showParkAccessByDate/:date', authenticated, function (req, res, next) {
   user.showParkAccessByDate(req, res);
 });
 
-router.get('/showOpenParkAccessByDate/:date', function(req, res, next) {
+router.get('/showOpenParkAccessByDate/:date', authenticated, function (req, res, next) {
   user.showOpenParkAccessByDate(req, res);
 });
 
-router.post('/createUser', function(req, res, next){
+router.post('/createUser', authenticated, function (req, res, next) {
   user.create(req, res);
 });
 
-router.put('/updateUser', function(req, res, next){
+router.put('/updateUser', authenticated, function (req, res, next) {
   user.updateUserCar(req, res);
 });
 
-router.get('/parkAccess', function (req, res, next) {
+router.get('/parkAccess', authenticated, function (req, res, next) {
   user.showParkAccess(req, res);
 });
 
-router.get('/userInfo/:number', function(req, res, next) {
+router.get('/userInfo/:number', authenticated,function (req, res, next) {
   user.showUserInfo(req, res);
 });
 
-router.get('/userEntries/:number', function(req, res, next) {
+router.get('/userEntries/:number', authenticated, function (req, res, next) {
   user.showUserParkEntries(req, res);
 });
 
-router.put('/disableAccess/:plate', function(req, res, next) {
+router.put('/disableAccess/:plate', authenticated, function (req, res, next) {
   user.disableUserParkAccess(req, res);
 });
 
-router.put('/enableAccess/:plate', function(req, res, next){
+router.put('/enableAccess/:plate', authenticated, function (req, res, next) {
   user.enableUserParkAccess(req, res);
 });
 
-router.get('/searchByPlate/:plate', function(req, res, next) {
+router.get('/searchByPlate/:plate', authenticated, function (req, res, next) {
   user.searchByPlate(req, res);
 });
 

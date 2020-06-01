@@ -1,0 +1,17 @@
+<div class="loginForm">
+    <div class="formClass">
+        <form [formGroup]="loginForm">
+            <label id="username"><b>Username</b></label>
+            <br>
+            <input formControlName="username">
+            <br>
+            <br>
+            <label id="password"><b>Password</b></label>
+            <br>
+            <input type="password" formControlName="password">
+            <br>
+            <br>
+            <button type="submit" class="btn btn-primary" id="loginButton" (click)="onSubmit()">Login</button>
+        </form>
+    </div>
+</div>

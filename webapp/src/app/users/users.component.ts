@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/User';
 import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -13,12 +14,13 @@ export class UsersComponent implements OnInit {
   pageSize = 10;
   collectionSize: number;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe(users => {
-      this.users = users;
-    });
+    this.userService.getUsers().subscribe(
+      users => this.users = users,
+      error => this.router.navigate([''])
+    );
   }
 
   get allUsers(): User[] {
@@ -31,14 +33,17 @@ export class UsersComponent implements OnInit {
 
   disableAccess(plate: string): void {
     this.userService.disableAccess(plate).subscribe(() =>
-    this.userService.getUsers().subscribe(users => {
-      this.users = users; }));
+    this.userService.getUsers().subscribe(
+      users => this.users = users,
+      error => this.router.navigate([''])
+    ));
   }
 
   enableAccess(plate: string): void {
     this.userService.enableAccess(plate).subscribe(() =>
-    this.userService.getUsers().subscribe(users => {
-      this.users = users; })
+    this.userService.getUsers().subscribe(
+      users => this.users = users,
+      error => this.router.navigate(['']))
     );
   }
 }

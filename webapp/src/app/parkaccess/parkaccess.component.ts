@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ParkAccessService } from '../services/park-access.service';
 import { ParkAccess } from '../models/ParkAccess';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-parkaccess',
@@ -22,7 +23,7 @@ export class ParkaccessComponent implements OnInit {
   collectionSize: number;
   allAccess: ParkAccess[];
 
-  constructor(private parkAccessService: ParkAccessService, private calendar: NgbCalendar) { }
+  constructor(private parkAccessService: ParkAccessService, private calendar: NgbCalendar, private router: Router) { }
 
   ngOnInit(): void {
     this.httpRequests(this.todayDate());
@@ -105,13 +106,16 @@ export class ParkaccessComponent implements OnInit {
   }
 
   httpRequests(date: string): void {
-    this.parkAccessService.getParkAccess(date).subscribe(parkAccess => {
-      this.parkAccess = parkAccess;
-    });
+    this.parkAccessService.getParkAccess(date).subscribe(
+      parkAccess => this.parkAccess = parkAccess,
+      error => this.router.navigate([''])
+      
+    );
 
-    this.parkAccessService.getOpenParkAccess(date).subscribe(openParkAccess => {
-      this.openParkAccess = openParkAccess;
-    });
+    this.parkAccessService.getOpenParkAccess(date).subscribe(openParkAccess => 
+      this.openParkAccess = openParkAccess,
+      error => this.router.navigate([''])
+    );
   }
 
   get parkAccessAll(): ParkAccess[] {
