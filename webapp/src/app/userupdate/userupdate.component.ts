@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserUpdate } from '../models/UserUpdate';
 import { FormControl, FormBuilder } from '@angular/forms';
 import { UserService } from '../services/user.service';
-
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-userupdate',
@@ -12,7 +11,6 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./userupdate.component.css']
 })
 export class UserupdateComponent implements OnInit {
-  closeResult = '';
   userNumber: string;
   user: UserUpdate;
   updateForm;

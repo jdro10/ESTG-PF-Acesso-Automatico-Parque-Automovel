@@ -29,6 +29,8 @@ app.use(cors({
 }));
 app.use(session({
   secret: 'secret',
+  cookie: { maxAge: 900000 },
+  rolling: true,
   saveUninitialized: false,
   resave: false
 }));

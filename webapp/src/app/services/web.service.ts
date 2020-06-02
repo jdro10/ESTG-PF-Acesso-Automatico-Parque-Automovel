@@ -31,4 +31,8 @@ export class WebService {
   currentUser(): Observable<any> {
     return this.http.get<any>(this.api_url + "/webUser/currentUsername", { withCredentials: true, headers: httpOptions.headers });
   }
+
+  signupAdmin(user: UserLogin): Observable<any> {
+    return this.http.post<any>(this.api_url + "/webUser/create", user, { withCredentials: true, headers: httpOptions.headers });
+  }
 }
