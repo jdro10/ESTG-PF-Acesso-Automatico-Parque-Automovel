@@ -4,3 +4,8 @@
     width: 100%;
     border-bottom: 1px solid;
 }
+
+.searchDiv {
+    position: absolute;
+    left: 45%;
+}
