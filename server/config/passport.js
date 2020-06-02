@@ -18,7 +18,7 @@ module.exports = function (passport) {
                     });
                 }
                 if (resQuery.rowCount == 0) {
-                    return done(null, false, { message: "Username inexistente."});
+                    return done(null, false, { error: "Username inexistente."});
                 } else if (resQuery.rowCount > 0) {
 
                     bcrypt.compare(password, resQuery.rows[0].passwordhash, function (err, resHash) {
@@ -30,7 +30,7 @@ module.exports = function (passport) {
                         if (resHash) {
                             return done(null, resQuery.rows[0]);
                         } else {
-                            return done(null, false, { message: "Password incorreta."});
+                            return done(null, false, { error: "Password incorreta."});
                         }
                     });
                 }

@@ -29,6 +29,14 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.user = this.loginForm.value;
 
-    this.webService.login(this.user).subscribe(loginMsg => { this.loginMsg = loginMsg, this.router.navigate(['/home']), alert(this.loginMsg.message )});
+    this.webService.login(this.user).subscribe(loginMsg => {
+      this.loginMsg = loginMsg;
+
+      if (loginMsg.success) {
+        this.router.navigate(['/home']);
+      } else {
+        alert(this.loginMsg.error);
+      }
+    }); 
   }
 }

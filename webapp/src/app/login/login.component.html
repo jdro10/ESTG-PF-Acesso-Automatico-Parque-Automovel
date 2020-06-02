@@ -1,17 +1,14 @@
-<div class="loginForm">
-    <div class="formClass">
-        <form [formGroup]="loginForm">
-            <label id="username"><b>Username</b></label>
-            <br>
-            <input formControlName="username">
-            <br>
-            <br>
-            <label id="password"><b>Password</b></label>
-            <br>
-            <input type="password" formControlName="password">
-            <br>
-            <br>
-            <button type="submit" class="btn btn-primary" id="loginButton" (click)="onSubmit()">Login</button>
-        </form>
-    </div>
+<div class="loginDiv">
+    <form class="form-signin" [formGroup]="loginForm">
+        <h1 class="h3 mb-3 font-weight-normal">Introduza as suas credenciais.</h1>
+
+        <label class="sr-only">Username</label>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus formControlName="username">
+
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required formControlName="password">
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="onSubmit()">Login</button>
+        <p class="mt-5 mb-3 text-muted" id="paragraph">&copy; Parque automóvel - 2020-2020</p>
+      </form>
 </div>
