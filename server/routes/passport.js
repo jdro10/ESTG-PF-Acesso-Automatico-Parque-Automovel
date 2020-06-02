@@ -22,7 +22,7 @@ router.post('/login', function (req, res, next) {
                 if (err) {
                     res.json(err);
                 } else {
-                    res.json({ message: "Login correto." })
+                    res.json({ success: "Login correto." });
                 }
             });
         }
