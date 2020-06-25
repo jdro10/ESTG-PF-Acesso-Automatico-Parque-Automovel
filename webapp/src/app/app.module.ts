@@ -19,6 +19,7 @@ import { UserupdateComponent } from './userupdate/userupdate.component';
 import { LoginComponent } from './login/login.component';
 import { LoggeduserComponent } from './loggeduser/loggeduser.component';
 import { SignupadminComponent } from './signupadmin/signupadmin.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { SignupadminComponent } from './signupadmin/signupadmin.component';
     HttpClientModule,
     FormsModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NoopAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
