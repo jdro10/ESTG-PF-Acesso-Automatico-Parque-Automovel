@@ -1,10 +1,10 @@
 .sidebarDiv {
   position: absolute;
   width: 10%;
-  height: 94%;
+  height: 90%;
   top: 6.2%;
   left: 0%;
-  border-right: 1px solid #475d88;
+  border-right: 1px solid #DCDCDC;
   background-color: #F8F8F8;
 }
 
