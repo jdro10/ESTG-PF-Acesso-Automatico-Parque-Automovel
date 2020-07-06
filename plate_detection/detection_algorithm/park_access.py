@@ -1,6 +1,6 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-
+import sys
 import pika
 import time
 import pygame
@@ -55,7 +55,9 @@ class ParkAccess:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    pygame.display.quit()
                     pygame.quit()
+                    sys.exit()
 
             self.display.fill(self.black)
             self.circle(75, int(self.display_height/2), self.white)
