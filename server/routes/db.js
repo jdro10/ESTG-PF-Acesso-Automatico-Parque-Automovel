@@ -10,7 +10,7 @@ function authenticated(req, res, next) {
     }
 }
 
-router.post('/', authenticated, function (req, res, next) {
+router.post('/', function (req, res, next) {
     dbC.createUserTable(req, res);
     dbC.createCarTable(req, res);
     dbC.createParkDriverTable(req, res);
