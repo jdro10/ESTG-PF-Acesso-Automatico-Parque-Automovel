@@ -83,8 +83,7 @@ class Menu:
                         for t in self.thread_list:
                             t.join()
 
-                    else:   
-                        print("Programa terminado.")      
+                    print("Programa terminado.")   
                     
                 else:
                     print("Escolha inválida, tente novamente.")

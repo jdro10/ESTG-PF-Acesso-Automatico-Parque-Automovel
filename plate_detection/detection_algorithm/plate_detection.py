@@ -111,7 +111,6 @@ class PlateDetection:
         car_info_json = json.dumps(car_info)
 
         print(car_info_json)
-
         self.send_json_to_server(car_info_json, self.queue_name)
 
         self.last_plate = self.plate_list[0]
