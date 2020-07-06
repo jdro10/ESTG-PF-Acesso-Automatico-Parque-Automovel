@@ -17,7 +17,6 @@ class PlateDetection:
         self.old_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[0-9]{2}$|[0-9]{2}[A-Z]{2}[0-9]{2}$|[0-9]{2}[0-9]{2}[A-Z]{2}$')
         self.new_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[A-Z]{2}$')
         self.plate_list = []
-        self.recognized_plates = []
         self.last_plate = None
         self.queue_name = queue_name
         self.current_time = datetime.datetime.now()
@@ -86,15 +85,8 @@ class PlateDetection:
         if not self.equal_elements(self.plate_list):
             self.plate_list = []
 
-        found = False
-
         if len(self.plate_list) == 3 and self.equal_elements(self.plate_list):
-            for plate in self.recognized_plates:
-                if self.plate_list[0] == plate:
-                    found = True
-
-            if not found or not self.last_plate == self.plate_list[0]:       
-                self.recognized_plates.append(self.plate_list[0])
+            if not self.last_plate == self.plate_list[0]:       
                 self.current_time = datetime.datetime.now()
                 self.plate_info_json()
 
