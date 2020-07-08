@@ -1,5 +1,4 @@
 import re
-import sys
 import cv2
 import json
 import pika
@@ -7,6 +6,7 @@ import socket
 import pygame
 import datetime
 import numpy as np
+import threading
 from openalpr import Alpr
 from threading import Thread
 from alpr_exception import AlprException
@@ -28,6 +28,8 @@ class PlateDetection:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))
         self.threads_list = []
+        self.plate_detection_time = []
+        self.plate_detection_confidence = []
 
     
     def read_stream(self):
@@ -59,9 +61,9 @@ class PlateDetection:
 
                 if cv2.waitKey(1) == 27:
                     self.stream = False
-                    cv2.destroyAllWindows()      
+                    cv2.destroyAllWindows()                   
+                
 
-    
     def plate_detection(self, frame):
         alpr = Alpr('eu', '/etc/openalpr/openalpr.conf', '/usr/share/openalpr/runtime_data')
 
@@ -78,12 +80,15 @@ class PlateDetection:
     
     def plate_as_text(self, results):
         for plate in results['results']:
+            self.plate_detection_time.append(plate['processing_time_ms'])
             for candidate in plate['candidates']:
                 if self.old_portuguese_plate_pattern.match(candidate['plate']) or self.new_portuguese_plate_pattern.match(candidate['plate']):
+                    self.plate_detection_confidence.append(plate['confidence'])
                     self.plate_list.append(candidate['plate'])
 
         if not self.equal_elements(self.plate_list):
             self.plate_list = []
+            self.plate_detection_confidence = []
 
         if len(self.plate_list) == 3 and self.equal_elements(self.plate_list):
             if not self.last_plate == self.plate_list[0]:       
@@ -103,6 +108,12 @@ class PlateDetection:
         car_info_json = json.dumps(car_info)
 
         print(car_info_json)
+        print("Tempo deteção: ", sum(self.plate_detection_time), len(self.plate_detection_time))
+        print("Confiança: ", self.plate_detection_confidence)
+
+        self.plate_detection_time = []
+        self.plate_detection_confidence = []
+
         self.send_json_to_server(car_info_json, self.queue_name)
 
         self.last_plate = self.plate_list[0]
@@ -118,13 +129,3 @@ class PlateDetection:
     
     def equal_elements(self, items):
         return all(plate == items[0] for plate in items)
-
-    
-    def close_program(self):
-        for t in self.threads_list:
-            t.join()
-
-        cv2.destroyAllWindows()
-        cv2.waitKey(1)
-        self.socket.close()
-        self.stream = False
