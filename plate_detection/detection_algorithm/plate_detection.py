@@ -27,7 +27,6 @@ class PlateDetection:
         self.PORT = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))
-        self.threads_list = []
         self.plate_detection_time = []
         self.plate_detection_confidence = []
 
@@ -55,9 +54,7 @@ class PlateDetection:
                 frame = cv2.imdecode(np.fromstring(full_jpeg_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
                 cv2.imshow('Stream', frame)
 
-                threadReadFrame = Thread(target=self.plate_detection, args=(frame, ))
-                threadReadFrame.start()
-                self.threads_list.append(threadReadFrame)
+                Thread(target=self.plate_detection, args=(frame, )).start()
 
                 if cv2.waitKey(1) == 27:
                     self.stream = False

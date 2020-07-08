@@ -23,7 +23,6 @@ class ParkAccess:
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.channel = self.connection.channel()
         self.queue_name = queue_name
-        self.thread_list = []
 
     
     def circle(self, pos_x, pos_y, color):
@@ -41,15 +40,8 @@ class ParkAccess:
         self.msg = body.decode("utf-8")
 
 
-    def close_program(self):
-        for t in self.thread_list:
-            t.join()
-
-
     def loop(self):
-        thread = Thread(target=self.consume)
-        thread.start()
-        self.thread_list.append(thread)
+        Thread(target=self.consume).start()
 
         while self.running:
             for event in pygame.event.get():
