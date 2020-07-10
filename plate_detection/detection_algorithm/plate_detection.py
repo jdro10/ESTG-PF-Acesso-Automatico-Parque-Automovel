@@ -13,7 +13,7 @@ from alpr_exception import AlprException
 
 class PlateDetection:
 
-    def __init__(self, queue_name, host, port):
+    def __init__(self, queue_name, host, port, cam_name):
         self.old_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[0-9]{2}$|[0-9]{2}[A-Z]{2}[0-9]{2}$|[0-9]{2}[0-9]{2}[A-Z]{2}$')
         self.new_portuguese_plate_pattern = re.compile(r'[A-Z]{2}[0-9]{2}[A-Z]{2}$')
         self.plate_list = []
@@ -29,6 +29,7 @@ class PlateDetection:
         self.socket.connect((self.HOST, self.PORT))
         self.plate_detection_time = []
         self.plate_detection_confidence = []
+        self.cam_name = cam_name
 
     
     def read_stream(self):
@@ -52,7 +53,7 @@ class PlateDetection:
                 socket_bytes = socket_bytes[jpeg_end_marker + 2 : ]
 
                 frame = cv2.imdecode(np.fromstring(full_jpeg_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
-                cv2.imshow('Stream', frame)
+                cv2.imshow(self.cam_name, frame)
 
                 Thread(target=self.plate_detection, args=(frame, )).start()
 
@@ -105,8 +106,8 @@ class PlateDetection:
         car_info_json = json.dumps(car_info)
 
         print(car_info_json)
-        print("Tempo deteção: ", sum(self.plate_detection_time), len(self.plate_detection_time))
-        print("Confiança: ", self.plate_detection_confidence)
+        #print("Tempo deteção: ", sum(self.plate_detection_time), len(self.plate_detection_time))
+        #print("Confiança: ", self.plate_detection_confidence)
 
         self.plate_detection_time = []
         self.plate_detection_confidence = []
