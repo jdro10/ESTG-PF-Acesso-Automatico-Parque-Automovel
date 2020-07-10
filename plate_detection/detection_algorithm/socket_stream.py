@@ -1,3 +1,4 @@
+import os
 import cv2
 import socket
 
@@ -15,19 +16,24 @@ class VideoCapture():
 
     
     def send_jpeg_bytes(self):
-        while self.listen:
-            print("A espera de uma conexão...")
-            (connection, address) = self.socket.accept()
+        try:
+            while self.listen:
+                print("A espera de uma conexão...")
+                (connection, address) = self.socket.accept()
 
-            try:
-                if connection:
-                    print("Conexão: ", address)
+                try:
+                    if connection:
+                        print("Conexão: ", address)
 
-                    while self.stream:
-                        ret, frame = self.capture.read()
-                        jpeg = cv2.imencode('.jpeg', frame)[1]
+                        while self.stream:
+                            ret, frame = self.capture.read()
+                            jpeg = cv2.imencode('.jpeg', frame)[1]
 
-                        connection.send(jpeg.tobytes())
+                            connection.send(jpeg.tobytes())
 
-            except ConnectionResetError:
-                print('Conexão terminada.')
+                except (ConnectionResetError, BrokenPipeError) as e:
+                    print('Conexão terminada.')
+
+        except KeyboardInterrupt:
+            print("Captura de imagens terminada.")
+            os._exit(0)
