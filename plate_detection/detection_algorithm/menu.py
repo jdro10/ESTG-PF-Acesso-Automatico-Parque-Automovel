@@ -25,7 +25,7 @@ class Menu:
             if choice == '1':
                 try:
                     self.entry_park_lights = ParkAccess("entry_queue_p")
-                    self.entry_plate_detection = PlateDetection("entry_queue", '192.168.1.65', 9000)
+                    self.entry_plate_detection = PlateDetection("entry_queue", '192.168.1.65', 9000, "Entrada")
                         
                     Thread(target=self.entry_plate_detection.read_stream).start()
                     Thread(target=self.entry_park_lights.loop).start()
@@ -51,7 +51,7 @@ class Menu:
             elif choice == '2':
                 try:
                     self.exit_park_lights = ParkAccess("exit_queue_p")
-                    self.exit_plate_detection = PlateDetection("exit_queue", '192.168.1.120', 9001)
+                    self.exit_plate_detection = PlateDetection("exit_queue", '192.168.1.65', 9001, "Saida")
 
                     Thread(target=self.exit_plate_detection.read_stream).start()
                     Thread(target=self.exit_park_lights.loop).start()
