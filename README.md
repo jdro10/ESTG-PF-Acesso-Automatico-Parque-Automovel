@@ -5,7 +5,7 @@ Neste repositório encontra-se todo o desenvolvimento da aplicação.
 
 ### Arquitetura
 
-![Arquitetura de software](https://github.com/jdro10/ESTG-PF-AcessoAutomaticoParqueAutomovel/blob/master/docs/software_architecture.png)
+<img src="https://github.com/jdro10/ESTG-PF-AcessoAutomaticoParqueAutomovel/blob/master/docs/software_architecture.png" width="600" height="600" />
 
 ### Estrutura do projeto
 
