@@ -2,6 +2,47 @@
 
 Neste repositório encontra-se o desenvolvimento de uma aplicação que permite o acesso automático a um parque automóvel e também a sua interação com o mesmo.
 
+### Arquitetura
+
+![Arquitetura de software](https://github.com/jdro10/ESTG-Projeto-Final/blob/master/docs/img/software%20architecture.png)
+
+### Estrutura do projeto
+
+```
+├── plate_detection              # Pasta que contém o programa de deteção de matrículas
+│   ├── detection_algorithm
+│   │   ├── alpr_exception.py    # OpenALPR exceção
+│   │   ├── menu.py              # Menu do programa
+│   │   ├── park_access.py       # Semáforo visual
+│   │   ├── plate_detection.py   # Algoritmo deteção de matrículas
+│   │   └── socket_stream.py     # Stream de imagens
+│   └── openalpr_tests
+│       └── openalpr_tests       # Teste biblioteca OpenALPR
+├── server                       # Servidor
+│   ├── bin
+│   ├── config                   # Configuração da base de dados e autenticação
+│   ├── controllers              # Controladores do projeto (utilizadores, base de dados, AMQP)
+│   ├── routes                   # Endpoints da REST API
+│   ├── app.js
+│   ├── package-lock.json
+│   └── package.json
+├── webapp                       # Webapp desenvolvida em Angular
+    └── src
+        └── app                  # Contém componentes, serviços e modelos do projeto
+```
+
+### Tecnologia
+
+* [Python](https://www.python.org/)
+* [OpenALPR](https://github.com/openalpr/openalpr)
+* [OpenCV](https://opencv.org/)
+* [RabbitMQ](https://www.rabbitmq.com/)
+* [Pygame](https://www.pygame.org/news)
+* [NodeJS](https://nodejs.org/en/)
+* [PostgreSQL](https://www.postgresql.org/)
+* [Angular](https://angular.io/)
+* [Raspberry Pi](https://www.raspberrypi.org/)
+
 ### Instalação (Linux)
 
 Instalação do openalpr na máquina:
@@ -61,37 +102,8 @@ python setup.py install --user
 
 Source: [Python binding](https://github.com/openalpr/openalpr/wiki/Integrating-OpenALPR)
 
-
-### Estrutura do projeto
-
-├── plate_detection
-│   ├── detection_algorithm     # Programa desenvolvido para deteção de matrículas
-│   └── openalpr_tests          # Testes da biblioteca OpenALPR
-├── server
-│   ├── bin
-│   ├── config
-│   ├── controllers
-│   ├── routes  
-├── webapp
-
-### Tecnologia
-
-* [NodeJS](https://nodejs.org/en/) - Servidor.
-
-* [OpenALPR](https://github.com/openalpr/openalpr) - Algoritmo de deteção de matrículas.
-
-* [OpenCV](https://opencv.org/) - Deteção de imagem.
-
-* [Raspberry Pi](https://www.raspberrypi.org/) - Mini computador a ser usado como base da aplicação.
-
-### Arquitetura
-
-![Arquitetura de software](https://github.com/jdro10/ESTG-Projeto-Final/blob/master/docs/img/software%20architecture.png)
-
 ### Desenvolvedor
 
 * Jorge Oliveira - 8160579
 
-### Orientador
-
-* Altino Sampaio
+### License
