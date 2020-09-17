@@ -61,6 +61,19 @@ python setup.py install --user
 
 Source: [Python binding](https://github.com/openalpr/openalpr/wiki/Integrating-OpenALPR)
 
+
+### Estrutura do projeto
+
+├── plate_detection
+│   ├── detection_algorithm     # Programa desenvolvido para deteção de matrículas
+│   └── openalpr_tests          # Testes da biblioteca OpenALPR
+├── server
+│   ├── bin
+│   ├── config
+│   ├── controllers
+│   ├── routes  
+├── webapp
+
 ### Tecnologia
 
 * [NodeJS](https://nodejs.org/en/) - Servidor.
