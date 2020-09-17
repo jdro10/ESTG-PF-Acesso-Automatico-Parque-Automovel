@@ -1,6 +1,7 @@
 # Acesso automático a parque estacionamento automóvel
 
-Neste repositório encontra-se o desenvolvimento de uma aplicação que permite o acesso automático a um parque automóvel e também a sua interação com o mesmo.
+Este projeto consiste na automatização do controlo de acesso a um parque de estacionamento automóvel, através da leitura e deteção automática de matrículas de veículos. Dois modos de acesso são implementados: 1) modo aberto - qualquer veículo pode aceder ao parque; 2) modo fechado - somente veículos pré-registados têm acesso. Os acessos são registados em base de dados PostgreSQL. A captura de imagens e execução de algoritmo de deteção de matrículas são efetuadas por um minicomputador Raspberry Pi. Por escalabilidade, a tarefa de deteção de matrículas pode ser transferida para computador com maior capacidade de processamento. O protocolo AMQP permite o envio fiável das matrículas para servidor que confirma/nega acesso ao parque. Toda a gestão do parque é feita através de website acessível ao administrador.
+Neste repositório encontra-se todo o desenvolvimento da aplicação.
 
 ### Arquitetura
 
