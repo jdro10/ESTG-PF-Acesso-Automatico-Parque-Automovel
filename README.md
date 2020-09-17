@@ -5,11 +5,12 @@ Neste repositório encontra-se todo o desenvolvimento da aplicação.
 
 ### Arquitetura
 
-![Arquitetura de software](https://github.com/jdro10/ESTG-Projeto-Final/blob/master/docs/img/software%20architecture.png)
+![Arquitetura de software](https://github.com/jdro10/ESTG-PF-AcessoAutomaticoParqueAutomovel/blob/master/docs/software_architecture.png)
 
 ### Estrutura do projeto
 
 ```
+├── docs                         # Arquitetura de software
 ├── plate_detection              # Pasta que contém o programa de deteção de matrículas
 │   ├── detection_algorithm
 │   │   ├── alpr_exception.py    # OpenALPR exceção
@@ -100,8 +101,30 @@ cd openalpr/src/bindings/python
 # Executar
 python setup.py install --user
 ```
-
 Source: [Python binding](https://github.com/openalpr/openalpr/wiki/Integrating-OpenALPR)
+
+Dependências Python:
+
+```sh
+# Instalação do OpenCV
+pip install opencv-python
+
+#Instalação do módulo pika para utilização do software RabbitMQ
+pip install pika
+
+#Instalação do Pygame
+pip install Pygame
+
+#Instalação do numpy em complemento ao OpenCV
+pip install numpy
+```
+
+Dependências NodeJS:
+```
+npm install
+```
+
+
 
 ### Desenvolvedor
 
